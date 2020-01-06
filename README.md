@@ -1,153 +1,36 @@
-`git init`
-
-create .gitignore and add `/node_modules/`
-
-`npm init` and follow prompts
-
-```
-npm install @babel/core @babel/preset-env autoprefixer babel-loader css-loader mini-css-extract-plugin fibers node-sass postcss-loader sass sass-loader style-loader webpack webpack-cli webpack-dev-server webpack-merge
-
-```
-
-create basic `/src` subdirectory file structure
-
-```
-- src/
-    - index.js
-    styles/
-        - index.scss
-    scripts/
-
-```
-
-in root directory, create `webpack.common.js`
-
-```JavaScript
-const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const outputDir = "./dist";
-
-module.exports = {
-    entry: path.resolve(__dirname, "src", "index.js"), //
-    output: {
-        path: path.join(__dirname, outputDir),
-        filename: "[name].js",
-        publicPath: "/dist/"
-    },
-    resolve: {
-        extensions: [".js"] // if we were using React.js, we would include ".jsx"
-    },
-    module: {
-        rules: [{
-                test: /\.js$/, // if we were using React.js, we would use \.jsx?$/
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: ["@babel/preset-env"],
-                        exclude: /node_modules/
-                    } // if we were using React.js, we would include "react"
-                }
-            },
-            {
-                test: /\.css$/,
-                use: [{
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            // you can specify a publicPath here
-                            // by default it uses publicPath in webpackOptions.output
-                            publicPath: "../",
-                            hmr: process.env.NODE_ENV === "development"
-                        }
-                    },
-                    "css-loader",
-                    "postcss-loader"
-                ]
-            },
-            {
-                test: /\.scss/,
-                use: [{
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            // you can specify a publicPath here
-                            // by default it uses publicPath in webpackOptions.output
-                            publicPath: "../",
-                            hmr: process.env.NODE_ENV === "development"
-                        }
-                    },
-                    "css-loader",
-                    "sass-loader",
-                    "postcss-loader"
-                ]
-            }
-        ]
-    },
-    plugins: [new MiniCssExtractPlugin({
-        // Options similar to the same options in webpackOptions.output
-        // all options are optional
-        filename: "[name].css",
-        chunkFilename: "[id].css",
-        ignoreOrder: false // Enable to remove warnings about conflicting order
-    }), require("autoprefixer")]
-};
-```
-
-Create `webpack.dev.js`
-
-```JavaScript
-const merge = require("webpack-merge");
-const common = require("./webpack.common.js");
-
-module.exports = merge(common, {
-    mode: "development",
-    devtool: "inline-source-map",
-    devServer: {
-        contentBase: "./",
-        watchContentBase: true,
-        open: "Google Chrome"
-    }
-});
-```
-
-Create `webpack.prod.js`
-
-```JavaScript
-const merge = require("webpack-merge");
-const common = require("./webpack.common.js");
-
-module.exports = merge(common, {
-    mode: "production",
-    devtool: "source-map"
-});
-```
-
-create `postcss.config.js`
-
-```JavaScript
-module.exports = {
-    plugins: {
-        autoprefixer: {}
-    }
-};
-```
-
-add `browserlist` key and update `scripts` in `package.json`
-
-```JavaScript
-  "browserslist": [
-    "last 1 version",
-    "> 1%",
-    "maintained node versions",
-    "not dead"
-  ],
-  "scripts": {
-    "start": "webpack-dev-server --config webpack.dev.js",
-    "webpack:watch": "webpack --watch --config webpack.dev.js",
-    "webpack:build": "webpack --config webpack.prod.js  --optimize-minimize"
-  },
-```
-
-create `index.scss` in `/src/styles`
-
-create `index.js` in `/src` directory and import style `/src/styles/index.scss`
-
-create `index.html` and import `dist/main.css` and `dist/main.js` appropriately
+# Music-Taste-Comparator
+A data visualizer for comparing taste between two Spotify users
+## Overview
+Music-Taste-Comparator is a data visualization and recomendation generator that takes in a current user and another inputed username. Using the Spotify API, data is retrieved on the current user which is used to create a visualization of their top artists, tracks, genres, etc. Using the inputed username, the Spotify API will fetch the public playlists of that username and that data will be used to make a comparison of the comonalities and differences between the 2 users in order so show how much they have in common and what artists or tracks the current user might be interested in that do not show in the current users data.
+## Functionality
+The user will log in to their account setting them as the current user. This gives access to all of their Spotify data through the API. This will generate a visualization of all their top artists, tracks, genres, and relevant information. The user will input a username of one of their friends or a user they follow. This will then generate a data visualization of any public information that user is allowing access to. Based on that data, a visualization will be generated representing the comonalities and differences between those two users. A recommended list of artists and tracks will be generated based on top tracks of the inputed user that the current user will be able to either keep or reject at their own discretion and the current user will now have a list of recomended songs that is coming from the inputed users data.
+## MVPs
+- Users will be able to log in and view their spotify data.
+- Users will be able to enter a known username of a friend or followed account and view their public data
+- Users will be able to view a comparative data visualization 
+- Users will be able to view a list of songs/artists that appear in the inputed users data and not their own
+- Users will be able to edit the list of songs/artits so they can currate a list of songs/artists to discover
+## Wire Frame
+The page consists of a single screen showing the current_user spotify username, an input for the searched username, a datavisualization of their compared data, and a list of suggested tracks based on the compared data.
+![Wire Frame](https://ootd-dev.s3.amazonaws.com/Wire_frame_2.png)
+## Technologies
+- JavaScript
+  - Vanilla JavaScript
+  - Basis of entire project
+- Spotify API
+  - Used to get relevant data for current_user and input_user
+- D3.js
+  - Used for data visualization and user experience
+## Implementation Timeline
+ - Day 1:
+   - Integrate Spotify API
+   - Integrate D3
+ - Day 2:
+   - Make get request for current_user
+   - Visualize current_user data
+ - Day 3:
+   - Make get requet for input user_name
+   - Visualize compared data
+ - Day 4:
+   - Compared data suggests tracks
+   - Finalize display
