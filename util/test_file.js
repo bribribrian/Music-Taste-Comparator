@@ -1,0 +1,7 @@
+https://accounts.spotify.com/authorize?client_id=23d6208c122645b897d2eb46f1b4ce01&scopes=playlist-read-private&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback
+
+23d6208c122645b897d2eb46f1b4ce01:d34e440e38ae4a07b641560ab5491e0e
+curl -H "Authorization: Basic MjNkNjIwOGMxMjI2NDViODk3ZDJlYjQ2ZjFiNGNlMDE6ZDM0ZTQ0MGUzOGFlNGEwN2I2NDE1NjBhYjU0OTFlMGU=" -d grant_type=authorization_code -d code=AQCKLGrJ8Wy00lXFR96cB4MbSE5sB-N3QhIEigdLPxwhg0WjJBG8sj8hYsIZBv02QLW-7A84c6I6T5PSC_O1s1j-7H-sp6-c2hEle0HzmRGhqLF0O-dN9RUhgYer6JHQBJ_mNBvaxe_HDYPd5mbivRphA0m80Qau6NzgV2cs86co-IwVEznuDicqlqPpGCgmG-esow -d redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fcallback https://accounts.spotify.com/api/token
+
+
+{"access_token":"BQAHTQtJ6UWo5F1tf_qOYRpF3w-4vf3hsRl5ATOMDK8PaOVagEVaZ5JcSFn3tAphY4MyjFx4Lan-b3cYi-gZxzaJAyqmPO9Rg-u-gxX4KnLYEEZ6_I2JtR_8NrZFFPEmmEHbRVe8Alyb_tjIKd66RW8","token_type":"Bearer","expires_in":3600,"refresh_token":"AQDEw8AT8SelPsknjckLwjJK584Y5Ge4lLvzX0p_5Yrk8C6jvVTKf7S3v3n1t8_NYBKqWSppKj8CwyTzvJjV6yk2MBLlVML78C2fJQHVOiEr0LiAtrucTo1wJE-6rW5lwLc","scope":""}Brians-MacBook-Pro:Desktop brianklein$ 
