@@ -63,12 +63,15 @@
     
     // console.log(track_info);
     const trackAttributes = <%- JSON.stringify(tracks_audiodata) %>;
+    const genreCollection = <%- JSON.stringify(genre_collection) %>;
     let htmlOutput = "<h1>Your tracks:</h1><ul>";
     console.log(trackAttributes);
+    console.log(genreCollection);
     trackAttributes.forEach(trackInfo => {
         htmlOutput += `<li>${trackInfo.name}</li>`;
     });
     htmlOutput += "</ul>";
+    // console.log(genreCollection);
     // document.getElementById("sessionData").innerHTML = `Your session data:
     // <br /> ${sessionData}`;
     // document.getElementById("trackinfo").innerHTML = function(trackAttriubutes) {

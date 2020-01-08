@@ -4,11 +4,13 @@ const stateKey = 'spotify_auth_state';
 const redirect_uri = 'http://localhost:8080/callback';
 const querystring = require('querystring');
 
+
 const spotifyAPI = new SpotifyWebApi({
     clientId: keys.clientID,
     clientSecret: keys.clientSecret,
     redirectUri: redirect_uri
 });
+
 
 function randomString(length) {
     let result = '';
@@ -20,8 +22,8 @@ function randomString(length) {
     return result;
 }
 
+
 module.exports.spotifyLogin = function (res) {
-    // console.log(res)
     let state = randomString(16);
     res.cookie(stateKey, state);
     let scope = 'user-top-read';
@@ -35,7 +37,6 @@ module.exports.spotifyLogin = function (res) {
         })
     );
 }
-
 
 
 module.exports.spotifyAuth = function (req, res) {
@@ -66,7 +67,6 @@ module.exports.spotifyAuth = function (req, res) {
         })
         .then(function ({tracks, audioData, artistData}) {
             audioData.then(data => {
-                // console.log(artistData);
                 let tracks_audiodata = data.body.audio_features.map((audio_feature, idx) => {
                     return Object.assign({}, audio_feature, tracks[idx]);
                 });
@@ -74,15 +74,18 @@ module.exports.spotifyAuth = function (req, res) {
                     tracks_audiodata.forEach((track, idx) => {
                         track.genres = data.body.artists[idx].genres
                     });
+                    let genre_collection = [];
+                    tracks_audiodata.forEach(track_obj => {
+                        genre_collection = genre_collection.concat(track_obj.genres);
+                    })
+                    req.session.genres_collection = genre_collection;
                     req.session.tracks_audiodata = tracks_audiodata;
-                    // console.log(data.body.artists[0])
                     res.redirect('/app');
                 });
             });
         })
     }).catch(error => console.log(error));
 }
-
 
 
 module.exports.getSearchedUser = function (user_id) {
@@ -101,7 +104,6 @@ module.exports.getSearchedUser = function (user_id) {
     })
     .then(function (playlist) {
         const tracks = playlist.body.tracks.items.slice(0, 50);
-
         return {
             tracks,
             trackIds: tracks.map(track => {
