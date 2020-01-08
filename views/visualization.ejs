@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://d3js.org/d3.v5.min.js" charset="utf-8"></script>
+  <title>
+    Music Taste Comparator
+  </title>
+</head>
+
+
+<body>
+        <h1>Music Taste Comparator</h1>
+        
+        <div id="trackinfo" class="trackinfo"></div>
+
+        <form id="searchForm">
+            <div>
+                <p>Enter a username</p>
+                  <input id='searchUser' type='text' value='username'></input>
+            </div>
+                <input type='submit'></input>
+        </form>
+        
+
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const seachForm = document.getElementById("searchForm");
+        seachForm.addEventListener("submit", handleSubmit);
+        function handleSubmit (e) {
+            e.preventDefault();
+            const searchUser = document.getElementById("searchUser");
+
+            console.log(searchUser.value);
+            // window.location.href = "/searcheduser"
+        }
+    });
+   
+
+    
+    // console.log(track_info);
+    // const trackInfo = <%- JSON.stringify(track_info) %>
+    const trackAttributes = <%- JSON.stringify(track_attributes) %>;
+    let htmlOutput = "<h1>Your tracks:</h1><ul>";
+    console.log(trackAttributes);
+    trackAttributes.forEach(trackInfo => {
+        htmlOutput += `<li>${trackInfo.title}</li>`;
+    });
+    htmlOutput += "</ul>";
+    // document.getElementById("sessionData").innerHTML = `Your session data:
+    // <br /> ${sessionData}`;
+    // document.getElementById("trackinfo").innerHTML = function(trackAttriubutes) {
+    //     trackAttributes.forEach(track => {
+    //         return <div>track.title</div>
+    //     }
+    // )};
+    
+    document.getElementById("trackinfo").innerHTML = htmlOutput;
+    //`Your tracks:
+    // <br /> 
+    // ${trackAttributes[0].title}`
+
+</script>

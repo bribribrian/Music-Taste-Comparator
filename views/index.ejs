@@ -6,14 +6,48 @@
         <title>
             Music Taste Comparator
         </title>
+        <script src="//d3js.org/d3.v5.min.js"></script>
         <link rel='stylesheet' href='/stylesheets/main.css' />
     </head>
 
     <body>
+        <!-- <button>Log In</button> -->
         <script>
             function loginPage() {
                 window.location.href = "/login"
             }
+        
+        let width = Math.max(200, innerWidth),
+            height = Math.max(200, innerHeight);
+
+        let svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+
+        svg.append("rect")
+        .attr("rx", 2)
+        .attr("ry", 2)
+        .attr('x', width / 2 - 100)
+        .attr('y', height / 2 + 90)
+        .attr("width", 200)
+        .attr("height", 58)
+        .attr('stroke', "red")
+        .classed("button-outline", true)
+        .on("click", loginPage)
+        .attr("fill", "black")
+
+        svg.append("g")
+        .attr("transform",
+        "translate(" + (width / 2 - 75) + " ," +
+        (height / 2 + 125) + ")")
+        .attr('stroke', "red")
+        .classed("button-outline", true)
+        .attr('font-weight', 100)
+        .on("click", loginPage)
+        .append("text")
+        .text("Log In")
+        .classed("button", true)
+
         </script>
     </body>
 </html>
