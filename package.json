@@ -10,6 +10,7 @@
     "not dead"
   ],
   "scripts": {
+    "start-2": "node ./bin/server",
     "start": "webpack-dev-server --config webpack.dev.js",
     "webpack:watch": "webpack --watch --config webpack.dev.js",
     "webpack:build": "webpack --config webpack.prod.js  --optimize-minimize"
@@ -24,6 +25,7 @@
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "css-loader": "^3.4.1",
+    "debug": "^4.1.1",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
     "express-session": "^1.17.0",

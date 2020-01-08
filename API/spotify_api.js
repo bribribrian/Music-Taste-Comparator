@@ -15,12 +15,13 @@ function randomString(length) {
     let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let charsLength = chars.length;
     for (let i = 0; i < length; i++) {
-        result += characters.charAt(Math.floor(Math.random() * charsLength));
+        result += chars.charAt(Math.floor(Math.random() * charsLength));
     }
     return result;
 }
 
 module.exports.spotifyLogin = function (res) {
+    // console.log(res)
     let state = randomString(16);
     res.cookie(stateKey, state);
     let scope = 'user-top-read';
@@ -35,12 +36,88 @@ module.exports.spotifyLogin = function (res) {
     );
 }
 
+
+
 module.exports.spotifyAuth = function (req, res) {
     spotifyAPI.authorizationCodeGrant(req.query.code).then(function (data) {
     spotifyAPI.setAccessToken(data.body.access_token);
     spotifyAPI.setRefreshToken(data.body.refresh_token);
-    return spotifyAPI.getMe();
-    }).then(
-        console.log(userData)
-    ).catch(error => console.log(error));
-};
+    return spotifyAPI.getMe()
+    }).then(function () {
+        spotifyAPI
+        .getMyTopTracks({ limit: 5 })
+        .then(function (data){
+            return {
+                tracks: data.body.items,
+                trackIds: data.body.items.map(track => {
+                   return track.id
+                }),
+                artistIds: data.body.items.map(track => {
+                    return track.artists[0].id
+                })
+            }
+        })
+        .then(function ({tracks, trackIds, artistIds}) {
+            return {
+                tracks,
+                audioData: spotifyAPI.getAudioFeaturesForTracks(trackIds),
+                artistData: spotifyAPI.getArtists(artistIds)
+            }
+        })
+        .then(function ({tracks, audioData, artistData}) {
+            audioData.then(data => {
+                // console.log(artistData);
+                let tracks_audiodata = data.body.audio_features.map((audio_feature, idx) => {
+                    return Object.assign({}, audio_feature, tracks[idx]);
+                });
+                artistData.then(data => {
+                    tracks_audiodata.forEach((track, idx) => {
+                        track.genres = data.body.artists[idx].genres
+                    });
+                    req.session.tracks_audiodata = tracks_audiodata;
+                    // console.log(data.body.artists[0])
+                    res.redirect('/app');
+                });
+            });
+        })
+    }).catch(error => console.log(error));
+}
+
+
+
+module.exports.getSearchedUser = function (user_id) {
+    return spotifyAPI.getUserPlaylists(user_id)
+    .then(function (playlist_data) {        
+        let playlistId;
+        playlist_data.body.items.forEach(playlist => {
+            if (playlist.name === "Your Top Songs 2019") {
+                playlistId = playlist.id;
+            }
+        });
+        return playlistId;
+    })
+    .then(function (playlist_id) {
+        return spotifyAPI.getPlaylist(playlist_id)
+    })
+    .then(function (playlist) {
+        const tracks = playlist.body.tracks.items.slice(0, 50);
+
+        return {
+            tracks,
+            trackIds: tracks.map(track => {
+                return track.track.id;
+            }),
+            artistIds: tracks.map(track => {
+                return track.track.artists[0].id
+            })
+        }
+    })
+    .then(function({tracks, trackIds, artistIds}) {
+        return {
+            tracks,
+            audioData: spotifyAPI.getAudioFeaturesForTracks(trackIds),
+            artistData: spotifyAPI.getArtists(artistIds)
+        }
+    })
+    .catch(error => console.log(error));
+}
