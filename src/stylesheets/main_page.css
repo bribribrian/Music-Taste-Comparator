@@ -1,0 +1,50 @@
+
+.nav-bar-container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+}
+
+.main-title {
+    display: flex;
+    /* width: 50%; */
+}
+.demo-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.demo {
+    display: flex;
+    align-items: center;
+}
+.search-form {
+    display: flex;
+    align-items: center;
+    /* width: 50%; */
+}
+
+.search-form-elements {
+    display: flex;
+}
+
+.main-body-container {
+    display: flex;
+}
+
+.top-tracks-title {
+    font-size: 24px;
+}
+
+.track-name {
+    font-size: 12px;
+}
+
+.canvas {
+    border: 3px solid black;
+}
+
+.tooltip {
+    text-align: center;
+}
