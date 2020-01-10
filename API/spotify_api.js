@@ -46,7 +46,7 @@ module.exports.spotifyAuth = function (req, res) {
     return spotifyAPI.getMe()
     }).then(function () {
         spotifyAPI
-        .getMyTopTracks({ limit: 5 })
+        .getMyTopTracks({ limit: 25 })
         .then(function (data){
             return {
                 tracks: data.body.items,
@@ -74,10 +74,21 @@ module.exports.spotifyAuth = function (req, res) {
                     tracks_audiodata.forEach((track, idx) => {
                         track.genres = data.body.artists[idx].genres
                     });
-                    let genre_collection = [];
+                    let genre_collection = {};
                     tracks_audiodata.forEach(track_obj => {
-                        genre_collection = genre_collection.concat(track_obj.genres);
-                    })
+                        track_obj.genres.forEach(genre => {
+                            if(genre_collection[genre]){
+                                genre_collection[genre].count++;
+                            } else {
+                                genre_collection[genre] = {genreName: genre, count: 1};
+                            }
+                        });
+                    });
+                    genre_collection = Object.values(genre_collection).map((obj, idx) => {
+                        obj.genreCode = idx;
+                        return obj;
+                    });
+
                     req.session.genres_collection = genre_collection;
                     req.session.tracks_audiodata = tracks_audiodata;
                     res.redirect('/app');

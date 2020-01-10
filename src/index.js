@@ -20,7 +20,7 @@ router.get('/searcheduser', function (req, res) {
               genreCollection = genreCollection.concat(track_obj.genres);
             })
             res.json({tracks_audiodata, genreCollection});
-            
+
           })
       });
     })
@@ -47,7 +47,7 @@ router.get('/login', function (req, res) {
 router.get('/app', function (req, res) {
   const { genres_collection } = req.session;
   const { tracks_audiodata } = req.session;
-  res.render('visualization', {
+  res.render('main_page', {
     tracks_audiodata: tracks_audiodata,
     genre_collection: genres_collection
   })
