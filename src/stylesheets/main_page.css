@@ -10,7 +10,15 @@
     display: flex;
     /* width: 50%; */
 }
-
+.demo-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.demo {
+    display: flex;
+    align-items: center;
+}
 .search-form {
     display: flex;
     align-items: center;
