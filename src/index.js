@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const spotifyAPI = require('../API/spotify_api');
 
-
 router.get('/searcheduser', function (req, res) {
   spotifyAPI.getSearchedUser(req.query.username)
     .then(function({tracks, audioData, artistData}){
@@ -15,11 +14,31 @@ router.get('/searcheduser', function (req, res) {
             tracks_audiodata.forEach((track, idx) => {
               track.genres = data.body.artists[idx].genres
             });
-            let genreCollection = [];
-            tracks_audiodata.forEach(track_obj => {
-              genreCollection = genreCollection.concat(track_obj.genres);
-            })
-            res.json({tracks_audiodata, genreCollection});
+            // let genreCollection = [];
+            // tracks_audiodata.forEach(track_obj => {
+            //   genreCollection = genreCollection.concat(track_obj.genres);
+             
+
+
+              let genre_collection2 = {};
+              tracks_audiodata.forEach(track_obj => {
+                  track_obj.genres.forEach(genre => {
+                      if(genre_collection2[genre]){
+                          genre_collection2[genre].count++;
+                      } else {
+                          genre_collection2[genre] = {genreName: genre, count: 1};
+                      }
+                  });
+              });
+              // genre_collection2 = Object.values(genre_collection2).map((obj, idx) => {
+              //     obj.genreCode = idx;
+              //     return obj;
+              // }); 
+
+
+
+            // })
+            res.json({tracks_audiodata, genre_collection2});
 
           })
       });

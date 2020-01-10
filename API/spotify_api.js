@@ -46,7 +46,7 @@ module.exports.spotifyAuth = function (req, res) {
     return spotifyAPI.getMe()
     }).then(function () {
         spotifyAPI
-        .getMyTopTracks({ limit: 25 })
+        .getMyTopTracks({ limit: 50 })
         .then(function (data){
             return {
                 tracks: data.body.items,
@@ -84,10 +84,10 @@ module.exports.spotifyAuth = function (req, res) {
                             }
                         });
                     });
-                    genre_collection = Object.values(genre_collection).map((obj, idx) => {
-                        obj.genreCode = idx;
-                        return obj;
-                    });
+                    // genre_collection = Object.values(genre_collection).map((obj, idx) => {
+                    //     obj.genreCode = idx;
+                    //     return obj;
+                    // });
 
                     req.session.genres_collection = genre_collection;
                     req.session.tracks_audiodata = tracks_audiodata;

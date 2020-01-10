@@ -4,27 +4,34 @@
 
 <head>
   <script src="https://d3js.org/d3.v5.min.js" charset="utf-8"></script>
-  <link rel='stylesheet' href='/stylesheets/main_page.css' />
   <title>
     Music Taste Comparator
   </title>
+  <link rel='stylesheet' href='/stylesheets/main_page.css' />
 </head>
 
 
 <body>
-        <h1>Music Taste Comparator</h1>
-        
-        <div id="trackinfo" class="trackinfo"></div>
+    <div class='nav-bar-container'>
+        <h1 class='main-title'>Music Taste Comparator</h1>
 
-        <form id="searchForm">
-            <div>
-                <p>Enter a username</p>
-                  <input id='searchUser' type='text' value='keenannichols'></input>
-            </div>
+        <form class='search-form' id="searchForm">
+            <div class='search-form-elements'>
+                <div>Enter a username</div>
+                <input id='searchUser' type='text' value='keenannichols'></input>
                 <input type='submit'></input>
+            </div>
         </form>
+    </div>
+
+
+    <div class='main-body-container'>
+        <div class='track-info-container' id="trackinfo" class="trackinfo"></div>
+
         
-        <div class='canvas'></div>
+        <div class='canvas' id='canvas'></div>
+        <div class='track-info-container2' id='trackinfo2' class='trackinfo2'></div>
+    </div>
 </body>
 <!-- <script src="../API/spotify_api.js"></script> -->
 <script>
@@ -54,22 +61,48 @@
 
     function ajaxSuccess() {
         if (this.status >= 200 && this.status < 400) {
-        const data = JSON.parse(this.response);
-        console.log(data);
+            const data = JSON.parse(this.response);
+            console.log(data);
+            let htmlOutput2 = "<div class='top-tracks-title'>Your Friend's Tracks:</div><ul>";
+            data.tracks_audiodata.forEach(track => {
+                htmlOutput2 += `<li class='track-name'>${track.name}</li>`;
+            });
+            htmlOutput2 += "</ul>";
+            document.getElementById("trackinfo2").innerHTML = htmlOutput2;
+            const genre_collection2 = data.genre_collection2;
+            document.getElementById('canvas').innerHTML = '';
+            Object.values(genre_collection2).forEach(genre_obj => {
+                if (genreCollection[genre_obj.genreName]) {
+                    genreCollection[genre_obj.genreName].count++;
+                } else {
+                    genreCollection[genre_obj.genreName] = genre_obj;
+                }
+            })
+            const genreCollectionArray2 = Object.values(genreCollection).map((obj, idx) => {
+                obj.genreCode = idx;
+                return obj;
+            }); 
+            createBubbleChart(genreCollectionArray2);
+
         } else {
         // error
         }
+
     }
 
     
     // console.log(track_info);
     const trackAttributes = <%- JSON.stringify(tracks_audiodata) %>;
     const genreCollection = <%- JSON.stringify(genre_collection) %>;
-    let htmlOutput = "<h1>Your tracks:</h1><ul>";
-    console.log(trackAttributes);
-    console.log(genreCollection);
+    const genreCollectionArray1 = Object.values(JSON.parse(JSON.stringify(genreCollection))).map((obj, idx) => {
+        obj.genreCode = idx;
+        return obj;
+    }); 
+    let htmlOutput = "<div class='top-tracks-title'>Your Top Tracks:</div><ul>";
+    // console.log(trackAttributes);
+    // console.log(genreCollectionArray1);
     trackAttributes.forEach(trackInfo => {
-        htmlOutput += `<li>${trackInfo.name}</li>`;
+        htmlOutput += `<li class='track-name'>${trackInfo.name}</li>`;
     });
     htmlOutput += "</ul>";
     // console.log(genreCollection);
@@ -105,27 +138,35 @@
 
         const countExtent = d3.extent(counts);
 
-        var genreColorScale = d3.scaleOrdinal(d3.schemeCategory10)
-            .domain([0,1,2]);
+        var genreColorScale = d3.scaleOrdinal(d3.schemeCategory10);
+            // .domain([0,1,2]);
 
         var width = 800,
-            height = 800,
-            clusterPadding = 1,
-            padding = 1.5;
+            height = 800;
+            // clusterPadding = .5,
+            // padding = 1.0;
         var svg,
             circles,
-            circleSize = { min: 10, max: 80 };
+            circleSize = { min: 2, max: 60 };
         var circleRadiusScale = d3.scaleSqrt()
             .domain(countExtent)
             .range([circleSize.min, circleSize.max]);
         var forces,
             forceSimulation;
 
+        // var div = d3.select(".canvas").append("div")
+        //     .attr("class", "tooltip")
+        //     .style("opacity", 0);
+
         createSVG();
         createCircles();
         createForces();
         createForceSimulation();
     
+        var div = d3.select(".canvas").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
         function createSVG() {
         svg = d3.select(".canvas")
         .append("svg")
@@ -136,30 +177,48 @@
         function createCircles() {
             var formatCount = d3.format(",");
             circles = svg.selectAll("circle")
-                .data(genreCollection)
+                .data(genres_collection)
                 .enter()
                     .append("circle")
                     .attr("r", function(g) { return circleRadiusScale(g.count); })
+                    .style("mix-blend-mode", "multiply")
+                    // .style("isolation", "isolate")
                     // .attr("cx", function(d) { 
                     //     debugger;
                     //     return d.count * 2; })
                     // .attr("cy", function(d) { return d.count; })
-                    .on("mouseover", function(g) {
-                        updateGenreInfo(g);
-                    })
-                    .on("mouseout", function(g) {
-                        updateGenreInfo();
-                    })
+                    .on("mouseover", handleMouseOver)
+                    .on("mouseout", handleMouseOut)
                     // .style("padding", 50);
             updateCircles();
 
-            function updateGenreInfo(genre) {
-                var info = "";
-                    if (genre) {
-                        info = [genre.genreName, formatCount(genre.count)].join(": ");
-                    }
-                d3.select("#genre-info").html(info);
+            // function updateGenreInfo(genre) {
+            //     var info = "";
+            //         if (genre) {
+            //             info = [genre.genreName, formatCount(genre.count)].join(": ");
+            //         }
+            //     d3.select("#genre-info").html(info);
+            //     }
+            function handleMouseOver(d, i) { 
+                d3.select(this)
+                .attr('fill', 'blue')
+                .style('stroke', 'black')
+                .style("opacity", 1)
+                div.transition()
+                .duration(200)
+                .style("opacity", 1);
+                div.html(`${d.genreName}: ${d.count}`)
+                // .style('mix-blend-mode', 'screen')
+                // .style("isolation", "isolate")
                 }
+
+                function handleMouseOut(d, i) {
+                d3.select(this)
+                .attr('fill', genreColorScale(i))
+                .style('stroke', 'white')
+                .style('mix-blend-mode', 'multiply')
+                }
+
         }
 
         
@@ -194,17 +253,16 @@
 
 
         function updateCircles() {
-        circles
-        // .each(collide(12))
+        svg.selectAll('circle')
         .attr("fill", function(g) {
-            genreColorScale(g.genreCode);
+            return genreColorScale(g.genreCode);
         });
         }
 
 
 
         function createForces() {
-            var forceStrength = -.005;
+            var forceStrength = -.0055;
         
 
             forces = {
@@ -213,8 +271,8 @@
 
             function createCombineForces() {
                 return {
-                    x: d3.forceX(-200).strength(forceStrength),
-                    y: d3.forceY(-200).strength(forceStrength)
+                    x: d3.forceX(-420).strength(forceStrength),
+                    y: d3.forceY(-420).strength(forceStrength)
                 };
             }
         }
@@ -223,20 +281,18 @@
                 forceSimulation = d3.forceSimulation()
                 .force("x", forces.combine.x)
                 .force("y", forces.combine.y)
-                .force("collide", d3.forceCollide(forceCollide));
-                forceSimulation.nodes(genreCollection)
+                // .force("collide", d3.forceCollide(d => d.radius * 1.2).strength(1))
+                forceSimulation.nodes(genres_collection)
                 .on("tick", function() {
                     circles
-                    .attr("cx", function(d) { 
-                        debugger;
-                        return d.x * 5; })
-                    .attr("cy", function(d) { return d.y * 5; })
+                    .attr("cx", function(d) { return d.x * 2.37; })
+                    .attr("cy", function(d) { return d.y * 2.37; })
                 });
             }
 
-            function forceCollide(g) {
-            return circleRadiusScale(g.Count) + 1;
-            };
+            // function forceCollide(g) {
+            // // return circleRadiusScale(g.Count -5);
+            // };
 
             // function updateForces(forces) {
             //  forceSimulation
@@ -248,5 +304,5 @@
             // }
 
     }   
-    createBubbleChart(genreCollection);
+    createBubbleChart(genreCollectionArray1);
 </script>

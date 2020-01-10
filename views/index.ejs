@@ -8,6 +8,8 @@
         </title>
         <script src="//d3js.org/d3.v5.min.js"></script>
         <link rel='stylesheet' href='/stylesheets/index.css' />
+
+        <!-- <button onclick='loginPage'>Log In</button> -->
     </head>
 
     <body>
@@ -17,8 +19,8 @@
                 window.location.href = "/login"
             }
         
-        let width = Math.max(200, innerWidth),
-            height = Math.max(200, innerHeight);
+        let width = Math.max(10, innerWidth),
+            height = Math.max(10, innerHeight);
 
         let svg = d3.select("body").append("svg")
         .attr("width", width)
@@ -27,25 +29,25 @@
         svg.append("rect")
         .attr("rx", 2)
         .attr("ry", 2)
-        .attr('x', width / 2 - 100)
-        .attr('y', height / 2 + 90)
+        .attr('x', width / 4 - 100)
+        .attr('y', height / 4 + 90)
         .attr("width", 200)
         .attr("height", 58)
-        .attr('stroke', "red")
+        .attr('stroke', "black")
         .classed("button-outline", true)
         .on("click", loginPage)
-        .attr("fill", "black")
+        .attr("fill", "white")
 
         svg.append("g")
         .attr("transform",
-        "translate(" + (width / 2 - 75) + " ," +
-        (height / 2 + 125) + ")")
-        .attr('stroke', "red")
+        "translate(" + (width / 4 - 65) + " ," +
+        (height / 4 + 125) + ")")
+        .attr('stroke', "black")
         .classed("button-outline", true)
         .attr('font-weight', 100)
         .on("click", loginPage)
         .append("text")
-        .text("Log In")
+        .text("Log In With Spotify")
         .classed("button", true)
 
         </script>
