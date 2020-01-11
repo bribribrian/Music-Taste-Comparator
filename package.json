@@ -9,6 +9,10 @@
     "maintained node versions",
     "not dead"
   ],
+  "engines": {
+    "node": "10.13.0",
+    "npm": "6.4.1"
+  },
   "scripts": {
     "start-2": "node ./bin/server",
     "start": "webpack-dev-server --config webpack.dev.js",

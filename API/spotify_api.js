@@ -1,7 +1,7 @@
 const keys = require('../util/keys.js');
 const SpotifyWebApi = require('spotify-web-api-node');
 const stateKey = 'spotify_auth_state';
-const redirect_uri = 'http://localhost:8080/callback';
+const redirect_uri = keys.redirect_uri;
 const querystring = require('querystring');
 
 
