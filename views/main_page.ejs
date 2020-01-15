@@ -84,9 +84,25 @@
             const genreCollectionArray2 = Object.values(genreCollection).map((obj, idx) => {
                 obj.genreCode = idx;
                 return obj;
-            }); 
-            createBubbleChart(genreCollectionArray2);
-
+            });
+            // console.log(dataObj);
+            // console.log(genre_collection2);
+            // createBubbleChart(genreCollectionArray2);
+            Object.keys(genre_collection2).forEach(key => {
+                dataObj.children.push({name: genre_collection2[key].name, children: []})
+            });
+            data.tracks_audiodata.forEach(track => {
+                track.genres.forEach(genre => {
+                    dataObj.children.forEach(child => {
+                        if (child.name === genre) {
+                            child.children.push({name: track.name, value: 1})
+                        }
+                    });
+                });
+            });
+            document.getElementById("canvas").innerHTML = "";
+            createSVG2();
+            createPie(dataObj);
         } else {
         // error
         }
@@ -326,10 +342,9 @@
             const height = 700;
             const radius = width/2;
             const format = d3.format(",d");
-            const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1));
+            const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, 13));
             function autoBox() {
                 const {x, y, width, height} = this.getBBox();
-                debugger;
                 return [x, y, width, height];
             };
             const arc = d3.arc()
@@ -399,7 +414,6 @@
             })
         })
     })
-    debugger;
     createSVG2();
     createPie(dataObj);
 </script>
