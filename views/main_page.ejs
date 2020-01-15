@@ -4,6 +4,8 @@
 
 <head>
   <script src="https://d3js.org/d3.v5.min.js" charset="utf-8"></script>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Noto+Serif|Open+Sans+Condensed:700&display=swap" rel="stylesheet">
   <title>
     Music Taste Comparator
   </title>
@@ -11,29 +13,53 @@
 </head>
 
 
-<body>
+<body class='body'>
     <div class='nav-bar-container'>
-        <h1 class='main-title'>Music Taste Comparator</h1>
-        <div class='demo-container'>
-            <div class='demo'>For demo purposes, try searching: bribrianbribri, keenannichols, diggin11</div>
-            <div class='instructions'>Tell your friends to make playlist "Top songs of 2019" public, then search</div>
-        </div>
-        <form class='search-form' id="searchForm">
-            <div class='search-form-elements'>
-                <div>Enter a username</div>
-                <input id='searchUser' type='text' value='username'></input>
-                <input type='submit'></input>
+        <div class='main-title-container-outer'>
+            <div class='main-title-container-inner'>
+                <h1 class='main-title'>MUSIC TASTE COMPARATOR</h1>
             </div>
-        </form>
+        </div>
+        <div class='demo-container-outer'>
+            <div class='demo-container-inner'>
+                <div class='demo'>For demo purposes, try searching: bribrianbribri, keenannichols, diggin11</div>
+                <div class='instructions'>Tell your friends to make playlist "Top songs of 2019" public, then search</div>
+            </div>
+        </div>
+        <div class='search-form-container-outer'>
+            <div class='search-form-container-inner'>
+                <form class='search-form' id="searchForm">
+                    <div class='search-form-elements'>
+                        <div>ENTER A USERNAME</div>
+                        <input class='input' id='searchUser' type='text' value='username'></input>
+                        <input class='submit-button' type='submit' value='SUBMIT'></input>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
 
     <div class='main-body-container'>
-        <div class='track-info-container' id="trackinfo" class="trackinfo"></div>
+        <div class='track-info-container-border-outer'>
+            <div class='track-info-container-border'>
+                <div class='track-info-container' id="trackinfo" class="trackinfo"></div>
+            </div>
+        </div>
+        <div class='mid-container'>
+            <div class='canvas' id='canvas'></div>
+            <div class='mid-bottom-outer'>
+                <div class='mid-bottom-inner'>
+                    
+                </div>
+            </div>
+        </div>
 
-        
-        <div class='canvas' id='canvas'></div>
-        <div class='track-info-container2' id='trackinfo2' class='trackinfo2'></div>
+        <div class='track-info-container-border-outer'>
+            <div class='track-info-container-border'>
+                <div class='track-info-container2' id='trackinfo2' class='trackinfo2'></div>
+            </div>
+        </div>
     </div>
 </body>
 <!-- <script src="../API/spotify_api.js"></script> -->
@@ -369,7 +395,7 @@
         //         .style('margin', '25px');
             
         svg.append('g')
-            .attr('fill-opacity', 0.6)
+            .attr('fill-opacity', .7)
             .selectAll('path')
             .data(root.descendants().filter(d => d.depth))
             .enter().append('path')
