@@ -48,9 +48,12 @@
         </div>
         <div class='mid-container'>
             <div class='canvas' id='canvas'></div>
+            <div class='canvas-sub-container'>
+                <div class='canvas-sub' id='canvas-sub'></div>
+            </div>
             <div class='mid-bottom-outer'>
                 <div class='mid-bottom-inner'>
-                    
+
                 </div>
             </div>
         </div>
@@ -210,9 +213,9 @@
         createForces();
         createForceSimulation();
     
-        var div = d3.select(".canvas").append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
+        // var div = d3.select(".canvas").append("div")
+        //     .attr("class", "tooltip")
+        //     .style("opacity", 0);
 
         function createSVG() {
         svg = d3.select(".canvas")
@@ -352,7 +355,7 @@
 
     }   
     // createBubbleChart(genreCollectionArray1);
-        function createSVG2() {
+    function createSVG2() {
         svg = d3.select(".canvas")
         .append("svg")
             // .attr("width", 500)
@@ -361,8 +364,9 @@
             .style('height', 'auto')
             .style('font', '10px sans-serif')
             .style('margin', '5px');
-        }
-        function  createPie(data_obj) {
+    }
+
+    function  createPie(data_obj) {
             const data = data_obj;
             const width = 700;
             const height = 700;
@@ -387,6 +391,10 @@
             .sum(d => d.value)
             .sort((a, b) => b.value - a.value));
             
+            const div = d3.select(".canvas-sub").append("div")	
+                .attr("class", "tooltip")				
+                .style("opacity", 0);
+
             const root = partition(data);
             // const svg = d3.create('svg')
             //         .style('max-width', '100%')
@@ -402,24 +410,67 @@
                 .attr('fill', d => { while ( d.depth > 1 ) d = d.parent; return color(d.data.name); })
                 // .attr('fill', d => {while})
                 .attr('d', arc)
+                .attr('fill-opacity', .7)
+            .style('stroke', 'transparent')
+            .on("mouseover", handleMouseOver)
+            .on("mouseout", handleMouseOut)
             .append('title')
                 .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
 
+
         svg.append('g')
-                .attr('pointer-event', 'none')
-                .attr('text-anchor', 'middle')
+            .attr('pointer-event', 'none')
+            .attr('text-anchor', 'middle')
             .selectAll('text')
             .data(root.descendants().filter(d => d.depth && (d.y0 + d.y1) / 2 * (d.x1 - d.x0) > 6))
-            .enter().append('text')
-                .attr('transform', function(d) {
-                    const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-                    const y = (d.y0 + d.y1) / 2;
-                    return `rotate(${x - 90}) translate(${y}, 0) rotate(${x < 180 ? 0 :180 })`;
-                })
-                .attr('dy', '0.35em')
-                .text(d => d.data.name);
+            // .enter().append('text')
+            //     .attr('transform', function(d) {
+            //         const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
+            //         const y = (d.y0 + d.y1) / 2;
+            //         return `rotate(${x - 90}) translate(${y}, 0) rotate(${x < 180 ? 0 :180 })`;
+            //     })
+            //     .attr('dy', '0.35em')
+            //     .text(d => d.data.name);
         
-        // yield svg.node();
+        function handleMouseOver(d, i) { 
+                d3.select(this)
+                // .attr('fill', 'blue')
+                .style('stroke', 'purple')
+                .attr("fill-opacity", 1)
+                .transition()
+                .duration(200)
+                .attr("stroke-width", 3)
+                div.transition()		
+                .duration(200)		
+                .style("opacity", 1);		
+                div	.html(d.data.name)
+                // .style("left", (d3.event.pageX) + "px")		
+                // .style("top", (d3.event.pageY - 28) + "px");	
+                
+                // .append('text')
+                // .text(d => d.data.name)
+                // .attr("fill-opacity", 1);
+                // div.html(`${d.genreName}: ${d.count}`)
+                // .style('mix-blend-mode', 'screen')
+                // .style("isolation", "isolate")
+        }
+
+        function handleMouseOut(d, i) {
+                d3.select(this)
+                .transition()
+                .duration(300)
+                .attr('fill-opacity', .7)
+                // .attr('fill', genreColorScale(i))
+                .style('stroke', 'transparent')
+                // .style('mix-blend-mode', 'multiply')
+                // .style('opacity', .7)
+                div.transition()		
+                .duration(200)		
+                .style("opacity", 0);
+        }   
+
+
+
 
         svg.attr('viewBox', autoBox);
     }

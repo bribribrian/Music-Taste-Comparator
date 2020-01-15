@@ -112,6 +112,7 @@ input[type=text] {
     background-color: black;
     color: white;
     flex-direction: column;
+    width: 300px;
 
 }
 .track-info-container-border-outer {
@@ -150,18 +151,28 @@ input[type=text] {
 }
 .canvas {
     /* display: flex; */
-    width: 800px;
+    /* position: relative; */
+    width: 600px;
     border: 17px solid black;
     padding: 25px;
     margin-left: 10px;
     margin-right: 10px;
-    max-height: 800px;
-    margin-bottom: 10px
+    max-height: 600px;
+    margin-bottom: 10px;
+}
+.canvas-sub-container {
+    display: flex;
+    min-height: 75px;
+    width: 100%;
+    background-color: black;
+    align-items: center;
+    justify-content: center;
 }
 .mid-bottom-outer {
     display: flex;
     background-color: black;
     height: 100%;
+    margin-top: 10px;
     margin-left: 10px;
     margin-right: 10px;
     padding: 15px;
@@ -177,4 +188,13 @@ input[type=text] {
 
 .tooltip {
     text-align: center;
-}
+    color: aquamarine; 
+    z-index: 200;
+    font-size: 32px;
+    font-family: 'Open Sans Condensed', sans-serif;
+    background-color: black;
+    border: 2px solid aquamarine;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 3px;
+} 
