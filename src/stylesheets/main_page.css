@@ -1,11 +1,30 @@
 .body {
+    display: flex;
     background-color: rgb(250, 202, 226);
+    justify-content: space-around;
+}
+.main-container {
+    display: flex;
+    justify-content: space-around;
+}
+.side-bar {
+    display: flex;
+    flex-shrink: 3;
+    flex-grow: 3;
+    width: 20%;
+}
+.mid-bar {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 1;
+    flex-grow: 1;
+    width: 100%;
 }
 .nav-bar-container {
     display: flex;
     justify-content: space-between;
-    width: 100%;
     max-height: 110px;
+    max-width: 1357px;
 
 }
 .main-title-container-outer {
@@ -106,13 +125,14 @@ input[type=text] {
     background-color: black;
     color: white;
     flex-direction: column;
+    width: 100%;
 }
 .track-info-container2 {
     display: flex;
     background-color: black;
     color: white;
     flex-direction: column;
-    width: 300px;
+    /* width: 300px; */
 
 }
 .track-info-container-border-outer {
@@ -120,41 +140,51 @@ input[type=text] {
     background-color: black;
     padding: 15px;
     flex-direction: column;
+    width: 25%;
 }
 .track-info-container-border {
     display: flex;
     border: 2px solid aquamarine;
     flex-direction: column;
     height: 100%;
+    min-width: 200px;
+    width: 100%;
 }
 .top-tracks-title {
     padding: 10px;
     display: flex;
     font-family: 'Noto Serif', serif;
     font-style: italic;
-    font-size: 24px;
+    font-size: 22px;
     color: aquamarine;
     margin: 0 auto;
     border-bottom: 2px solid aquamarine;
     width: 70%;
 }
+.tracks-ul {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 
+}
 .track-name {
-    display:flex;
+    display: flex;
     font-family: 'Noto Serif', serif;
     font-size: 12px;
     padding-right: 15px;
+    max-width: 200px;
 }
 .mid-container {
     display: flex;
     flex-direction: column;
+    width: 50%;
 }
 .canvas {
     /* display: flex; */
     /* position: relative; */
-    width: 600px;
+    /* width: 100%; */
     border: 17px solid black;
-    padding: 25px;
+    padding: 10px;
     margin-left: 10px;
     margin-right: 10px;
     max-height: 600px;

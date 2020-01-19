@@ -14,55 +14,61 @@
 
 
 <body class='body'>
-    <div class='nav-bar-container'>
-        <div class='main-title-container-outer'>
-            <div class='main-title-container-inner'>
-                <h1 class='main-title'>MUSIC TASTE COMPARATOR</h1>
-            </div>
-        </div>
-        <div class='demo-container-outer'>
-            <div class='demo-container-inner'>
-                <div class='demo'>For demo purposes, try searching: bribrianbribri, keenannichols, diggin11</div>
-                <div class='instructions'>Tell your friends to make playlist "Top songs of 2019" public, then search</div>
-            </div>
-        </div>
-        <div class='search-form-container-outer'>
-            <div class='search-form-container-inner'>
-                <form class='search-form' id="searchForm">
-                    <div class='search-form-elements'>
-                        <div>ENTER A USERNAME</div>
-                        <input class='input' id='searchUser' type='text' value='username'></input>
-                        <input class='submit-button' type='submit' value='SUBMIT'></input>
+    <div class='main-container'>
+        <div class='side-bar'></div>
+        <div class='mid-bar'>
+            <div class='nav-bar-container'>
+                <div class='main-title-container-outer'>
+                    <div class='main-title-container-inner'>
+                        <h1 class='main-title'>MUSIC TASTE COMPARATOR</h1>
                     </div>
-                </form>
+                </div>
+                <div class='demo-container-outer'>
+                    <div class='demo-container-inner'>
+                        <div class='demo'>For demo purposes, try searching: bribrianbribri, keenannichols, diggin11</div>
+                        <div class='instructions'>Tell your friends to make playlist "Top songs of 2019" public, then search</div>
+                    </div>
+                </div>
+                <div class='search-form-container-outer'>
+                    <div class='search-form-container-inner'>
+                        <form class='search-form' id="searchForm">
+                            <div class='search-form-elements'>
+                                <div>ENTER A USERNAME</div>
+                                <input class='input' id='searchUser' type='text' value='username'></input>
+                                <input class='submit-button' type='submit' value='SUBMIT'></input>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
 
-    <div class='main-body-container'>
-        <div class='track-info-container-border-outer'>
-            <div class='track-info-container-border'>
-                <div class='track-info-container' id="trackinfo" class="trackinfo"></div>
-            </div>
-        </div>
-        <div class='mid-container'>
-            <div class='canvas' id='canvas'></div>
-            <div class='canvas-sub-container'>
-                <div class='canvas-sub' id='canvas-sub'></div>
-            </div>
-            <div class='mid-bottom-outer'>
-                <div class='mid-bottom-inner'>
+            <div class='main-body-container'>
+                <div class='track-info-container-border-outer'>
+                    <div class='track-info-container-border'>
+                        <div class='track-info-container' id="trackinfo" class="trackinfo"></div>
+                    </div>
+                </div>
+                <div class='mid-container'>
+                    <div class='canvas' id='canvas'></div>
+                    <div class='canvas-sub-container'>
+                        <div class='canvas-sub' id='canvas-sub'></div>
+                    </div>
+                    <div class='mid-bottom-outer'>
+                        <div class='mid-bottom-inner'>
 
+                        </div>
+                    </div>
+                </div>
+
+                <div class='track-info-container-border-outer'>
+                    <div class='track-info-container-border'>
+                        <div class='track-info-container2' id='trackinfo2' class='trackinfo2'></div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class='track-info-container-border-outer'>
-            <div class='track-info-container-border'>
-                <div class='track-info-container2' id='trackinfo2' class='trackinfo2'></div>
-            </div>
-        </div>
+        <div class='side-bar'></div>
     </div>
 </body>
 <!-- <script src="../API/spotify_api.js"></script> -->
@@ -95,10 +101,10 @@
         if (this.status >= 200 && this.status < 400) {
                 const data = JSON.parse(this.response);
                 console.log(data);
-                let htmlOutput2 = "<div class='top-tracks-title'>Your Friend's Tracks:</div><ul>";
+                let htmlOutput2 = "<div class='top-tracks-title'>Your Friend's Tracks:</div><ul class='tracks-ul'>";
                 data.tracks_audiodata.forEach(track => {
-                    htmlOutput2 += `<li class='track-name'>${track.name}</li>`;
-            });
+                        htmlOutput2 += `<li class='track-name'>- ${track.name}</li>`;
+                });
             htmlOutput2 += "</ul>";
             document.getElementById("trackinfo2").innerHTML = htmlOutput2;
             const genre_collection2 = data.genre_collection2;
@@ -152,9 +158,9 @@
         obj.genreCode = idx;
         return obj;
     }); 
-    let htmlOutput = "<div class='top-tracks-title'>Your Top Tracks:</div><ul>";
+    let htmlOutput = "<div class='top-tracks-title'>Your Top Tracks:</div><ul class='tracks-ul'>";
     trackAttributes.forEach(trackInfo => {
-        htmlOutput += `<li class='track-name'>${trackInfo.name}</li>`;
+        htmlOutput += `<li class='track-name'>- ${trackInfo.name}</li>`;
     });
     htmlOutput += "</ul>";
     
@@ -248,8 +254,16 @@
                 .attr("stroke-width", 3)
                 div.transition()		
                 .duration(200)		
-                .style("opacity", 1);		
-                div	.html(d.data.name)
+                .style("opacity", 1);
+                let editName = ''
+                if (d.data.name) {
+                    if (d.data.name.length < 25){
+                        editName = d.data.name
+                    } else {
+                        editName = d.data.name.slice(0,23) + '...'
+                    };	
+                };
+                div	.html(editName)
                 // .style("left", (d3.event.pageX) + "px")		
                 // .style("top", (d3.event.pageY - 28) + "px");	
                 
