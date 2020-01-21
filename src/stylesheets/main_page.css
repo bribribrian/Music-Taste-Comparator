@@ -125,15 +125,18 @@
   }
   
   .instructions-title {
-    padding: 10px;
+    padding: 9px;
     display: flex;
     font-family: 'Noto Serif', serif;
     font-style: italic;
     font-size: 22px;
     color: aquamarine;
-    margin: 0 auto;
-    border-bottom: 2px solid aquamarine;
-    width: 70%;
+    margin-left: 37px;
+  }
+  .welcome-line {
+    width: 77%;
+    border-top: 2px solid aquamarine;
+    margin-left: 23px;
   }
 
   .instructions-content {
@@ -145,6 +148,7 @@
     padding-bottom: 15px;
     max-width: 200px;
     color: rgb(250, 202, 226);
+    line-height: 1.2;
   }
 
 .demo {
@@ -185,8 +189,10 @@
     /* background-color: aquamarine; */
     color: aquamarine;
     padding: 3px;
+    height: 29px;
     font-size: 12px;
     text-align: center;
+    padding-top: 8px;
 }
 
 
@@ -221,17 +227,16 @@ input[type=text] {
 .track-info-container {
     display: flex;
     background-color: black;
-    color: white;
     flex-direction: column;
     width: 100%;
+    align-items: center;
 }
 .track-info-container2 {
     display: flex;
     background-color: black;
-    color: white;
     flex-direction: column;
-    /* width: 300px; */
-
+    width: 100%;
+    align-items: center;
 }
 .track-info-container-border-outer {
     display: flex;
@@ -256,22 +261,42 @@ input[type=text] {
     font-size: 22px;
     color: aquamarine;
     margin: 0 auto;
-    border-bottom: 2px solid aquamarine;
-    width: 70%;
+    /* border-bottom: 2px solid aquamarine; */
+    /* width: 70%; */
+}
+.top-tracks-title-line {
+    display: flex;
+    width: 80%;
+    border-top: 2px solid aquamarine;
+    
+    
 }
 .tracks-ul {
     display: flex;
     flex-direction: column;
     width: 100%;
+    padding: 5px;
+    padding-left: 30px;
+    list-style-type: disc;
 
+}
+ul {
+    list-style: none;
+  }
+  
+li::before {
+    content: "•  ";
+    color: aquamarine;
+    margin-right: 5px;
+    margin-left: 20px;
 }
 .track-name {
     display: flex;
     font-family: 'Noto Serif', serif;
     font-size: 12px;
-    padding-right: 15px;
-    max-width: 200px;
+    max-width: 215px;
     color: rgb(250, 202, 226);
+    padding: 3px;
 }
 .mid-container {
     display: flex;
@@ -313,6 +338,16 @@ input[type=text] {
     width: 100%;
     height: 100%;
     border: 2px solid aquamarine;
+    flex-direction: column;
+    align-items: center;
+}
+.mid-bottom-body {
+    display: flex;
+    height: 90%;
+}
+.mid-bottom-line {
+    width: 90%;
+    border-top: 2px solid aquamarine;
 }
 
 .tooltip {
@@ -325,5 +360,55 @@ input[type=text] {
     border: 2px solid aquamarine;
     padding-left: 10px;
     padding-right: 10px;
-    padding-bottom: 3px;
+    padding-bottom: 10px;
+    padding-top: 5px;
 } 
+.footer {
+    margin-top: 5px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.footer-info {
+    font-family: 'Open Sans Condensed', sans-serif;
+    display: flex;
+    font-size: 12px;
+    color: rgb(250, 202, 226);
+    align-items: flex-end;
+    padding: 5px;
+    padding-left: 7px;
+}
+.by {
+    color: aquamarine;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+    font-size: 10px;
+    margin-right: 5px;
+
+}
+.footer-icons {
+    display: flex;
+    font-size: 32px;
+    color: rgb(250, 202, 226);
+    padding: 5px;
+    padding-right: 7px;
+    justify-content: space-around;
+    width: 23%
+}
+
+a:hover {
+    color: rgb(253, 138, 58)
+}
+
+a:visited {
+    color: rgb(53, 148, 224);
+  }
+a:active {
+    color:rgb(106, 252, 97);
+}
+/* a:visited:active {
+    color:rgb(106, 252, 97);
+} */
+a:visited:hover{
+    color: rgb(253, 138, 58)
+}

@@ -9,7 +9,9 @@
   <title>
     Music Taste Comparator
   </title>
+  <link rel='stylesheet' href='/stylesheets/reset.css' />
   <link rel='stylesheet' href='/stylesheets/main_page.css' />
+  <script src="https://kit.fontawesome.com/12ffa399b2.js" crossorigin="anonymous"></script>
 </head>
 
 
@@ -33,6 +35,7 @@
                                     <div class='instructions-title'>
                                         Welcome!
                                     </div>
+                                    <div class='welcome-line'></div>
                                     <div class='instructions-content'>
                                         This App is still under developement.
                                     <br>
@@ -84,7 +87,18 @@
                     </div>
                     <div class='mid-bottom-outer'>
                         <div class='mid-bottom-inner'>
-
+                            <div class='mid-bottom-body'></div>
+                            <div class='mid-bottom-line'></div>
+                            <div class='footer'>
+                                <div class='footer-info'>
+                                    <div>Music Taste Comparator <span class='by'>by</span>Brian Klein</div>
+                                </div>
+                                <div class='footer-icons'>
+                                    <a href='https://github.com/bribribrian'><i class="fab fa-github-square"></i></a>
+                                    <a href='https://angel.co/bribribrian'><i class="fab fa-angellist"></i></a>
+                                    <a href='https://www.linkedin.com/in/brian-klein-a5a400129/'><i class="fab fa-linkedin"></i></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -129,9 +143,9 @@
         if (this.status >= 200 && this.status < 400) {
                 const data = JSON.parse(this.response);
                 console.log(data);
-                let htmlOutput2 = "<div class='top-tracks-title'>Your Friend's Tracks:</div><ul class='tracks-ul'>";
+                let htmlOutput2 = "<div class='top-tracks-title'>Your Friend's Tracks:</div><div class='top-tracks-title-line'></div><ul class='tracks-ul'>";
                 data.tracks_audiodata.forEach(track => {
-                        htmlOutput2 += `<li class='track-name'>- ${track.name}</li>`;
+                        htmlOutput2 += `<li class='track-name'>${track.name}</li>`;
                 });
             htmlOutput2 += "</ul>";
             document.getElementById("trackinfo2").innerHTML = htmlOutput2;
@@ -186,9 +200,9 @@
         obj.genreCode = idx;
         return obj;
     }); 
-    let htmlOutput = "<div class='top-tracks-title'>Your Top Tracks:</div><ul class='tracks-ul'>";
+    let htmlOutput = "<div class='top-tracks-title'>Your Top Tracks:</div><div class='top-tracks-title-line'></div><ul class='tracks-ul'>";
     trackAttributes.forEach(trackInfo => {
-        htmlOutput += `<li class='track-name'>- ${trackInfo.name}</li>`;
+        htmlOutput += `<li class='track-name'>${trackInfo.name}</li>`;
     });
     htmlOutput += "</ul>";
     
