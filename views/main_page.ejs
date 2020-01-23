@@ -87,7 +87,7 @@
                     </div>
                     <div class='mid-bottom-outer'>
                         <div class='mid-bottom-inner'>
-                            <div class='mid-bottom-body'></div>
+                            <div class='mid-bottom-body' id='comparativedata'></div>
                             <div class='mid-bottom-line'></div>
                             <div class='footer'>
                                 <div class='footer-info'>
@@ -141,12 +141,12 @@
 
     function ajaxSuccess() {
         if (this.status >= 200 && this.status < 400) {
-                const data = JSON.parse(this.response);
-                console.log(data);
-                let htmlOutput2 = "<div class='top-tracks-title'>Your Friend's Tracks:</div><div class='top-tracks-title-line'></div><ul class='tracks-ul'>";
-                data.tracks_audiodata.forEach(track => {
-                        htmlOutput2 += `<li class='track-name'>${track.name}</li>`;
-                });
+            const data = JSON.parse(this.response);
+            console.log(data);
+            let htmlOutput2 = "<div class='top-tracks-title'>Your Friend's Tracks:</div><div class='top-tracks-title-line'></div><ul class='tracks-ul'>";
+            data.tracks_audiodata.forEach(track => {
+                 htmlOutput2 += `<li class='track-name'>${track.name}</li>`;
+            });
             htmlOutput2 += "</ul>";
             document.getElementById("trackinfo2").innerHTML = htmlOutput2;
             const genre_collection2 = data.genre_collection2;
@@ -168,7 +168,9 @@
                 let newChildObj = {name: child.name, children: Array.from(child.children)};
                 newObj.children[idx] = newChildObj;
             });
+            console.log("this is the newObj");
             console.log(newObj);
+            console.log("this is the dataObj - orig data")
             console.log(dataObj);
             Object.keys(genre_collection2).forEach(key => {
                 newObj.children.push({name: genre_collection2[key].name, children: []})
@@ -182,8 +184,42 @@
                     });
                 });
             });
-            console.log(newObj);
+            let compareObj = {};
+            let compareArr = [];
+
+            Object.values(dataObj.children).forEach((genreObj1, index) => {
+                // console.log(genreObj1.name);
+                // console.log(index);
+                // console.log(genreObj1.children.length)
+                // console.log(genreObj1.children.length);
+                // console.log(newObj.children[index].name);
+                // console.log(newObj.children[index].children.length);
+                // console.log("difference");
+                // console.log(newObj.children[index].children.length - genreObj1.children.length);
+                if (newObj.children[index].children.length/genreObj1.children.length > 1) {
+                // compareObj[newObj.children[index].name] = 2 - (newObj.children[index].children.length/genreObj1.children.length);
+                    let compVar = 2 - (newObj.children[index].children.length/genreObj1.children.length); 
+                    if (compVar < 0) {
+                        compVar = -1 * compVar;
+                    } else if (compVar === 0) {
+                        compVar = 0.9;
+                    } else {
+                        compVar = compVar;
+                    }
+                compareArr.push([newObj.children[index].name, newObj.children[index].children.length/compVar])
+                }
+                compareArr.sort(function(a, b) {return b[1] - a[1]});
+            });
+            console.log(compareArr);
+            // console.log(newObj);
             document.getElementById("canvas").innerHTML = "";
+            document.getElementById("comparativedata").innerHTML = 
+                `<div class='comparative-data-output'>
+                    <div class='top-genre-container'>
+                        <div class='top-genre-title'>Most Compatable Genre:</div>
+                        <div class='top-genre'>${compareArr[0][0]}</div>
+                    </div>
+                </div>`
             createSVG();
             createPie(newObj);
         } else {
@@ -211,110 +247,85 @@
     function createSVG() {
         svg = d3.select(".canvas")
         .append("svg")
-            // .attr("width", 500)
-            // .attr("height", 500)
-            .style('max-width', '100%')
-            .style('height', 'auto')
-            .style('font', '10px sans-serif')
-            .style('margin', '5px');
+        // .attr("width", 500)
+        // .attr("height", 500)
+        .style('max-width', '100%')
+        .style('height', 'auto')
+        .style('font', '10px sans-serif')
+        .style('margin', '5px');
     }
 
     function  createPie(data_obj) {
-            const data = data_obj;
-            const width = 700;
-            const height = 700;
-            const radius = width/2;
-            const format = d3.format(",d");
-            const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, 13));
-            function autoBox() {
-                const {x, y, width, height} = this.getBBox();
-                return [x, y, width, height];
-            };
-            const arc = d3.arc()
-            .startAngle(d => d.x0)
-            .endAngle(d => d.x1)
-            .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
-            .padRadius(radius / 2)
-            .innerRadius(d => d.y0)
-            .outerRadius(d => d.y1 - 1);
+        const data = data_obj;
+        const width = 700;
+        const height = 700;
+        const radius = width/2;
+        const format = d3.format(",d");
+        const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, 13));
+        function autoBox() {
+            const {x, y, width, height} = this.getBBox();
+            return [x, y, width, height];
+        };
+        const arc = d3.arc()
+        .startAngle(d => d.x0)
+        .endAngle(d => d.x1)
+        .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
+        .padRadius(radius / 2)
+        .innerRadius(d => d.y0)
+        .outerRadius(d => d.y1 - 1);
             
-            const partition = data => d3.partition()
-            .size([2 * Math.PI, radius])
-            (d3.hierarchy(data)
-            .sum(d => d.value)
-            .sort((a, b) => b.value - a.value));
+        const partition = data => d3.partition()
+        .size([2 * Math.PI, radius])
+        (d3.hierarchy(data)
+        .sum(d => d.value)
+        .sort((a, b) => b.value - a.value));
 
-            d3.selectAll("div.tooltip").remove()
-            const div = d3.select(".canvas-sub").append("div")	
-                .attr("class", "tooltip")				
-                .style("opacity", 0);
+        d3.selectAll("div.tooltip").remove()
+        const div = d3.select(".canvas-sub").append("div")	
+        .attr("class", "tooltip")				
+        .style("opacity", 0);
 
-            const root = partition(data);
-            // const svg = d3.create('svg')
-            //         .style('max-width', '100%')
-            //         .style('height', 'auto')
-        //         .style('font', '10px sans-serif')
-        //         .style('margin', '25px');
-            
+        const root = partition(data);
+        
         svg.append('g')
             .attr('fill-opacity', .7)
             .selectAll('path')
             .data(root.descendants().filter(d => d.depth))
             .enter().append('path')
-                .attr('fill', d => { while ( d.depth > 1 ) d = d.parent; return color(d.data.name); })
-                // .attr('fill', d => {while})
-                .attr('d', arc)
-                .attr('fill-opacity', .7)
+            .attr('fill', d => { while ( d.depth > 1 ) d = d.parent; return color(d.data.name); })
+            .attr('d', arc)
+            .attr('fill-opacity', .7)
             .style('stroke', 'transparent')
             .on("mouseover", handleMouseOver)
             .on("mouseout", handleMouseOut)
             .append('title')
-                .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
-
+            .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
 
         svg.append('g')
             .attr('pointer-event', 'none')
             .attr('text-anchor', 'middle')
             .selectAll('text')
             .data(root.descendants().filter(d => d.depth && (d.y0 + d.y1) / 2 * (d.x1 - d.x0) > 6))
-            // .enter().append('text')
-            //     .attr('transform', function(d) {
-            //         const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-            //         const y = (d.y0 + d.y1) / 2;
-            //         return `rotate(${x - 90}) translate(${y}, 0) rotate(${x < 180 ? 0 :180 })`;
-            //     })
-            //     .attr('dy', '0.35em')
-            //     .text(d => d.data.name);
-        
+           
         function handleMouseOver(d, i) { 
-                d3.select(this)
-                // .attr('fill', 'blue')
-                .style('stroke', 'purple')
-                .attr("fill-opacity", 1)
-                .transition()
-                .duration(200)
-                .attr("stroke-width", 3)
-                div.transition()		
-                .duration(200)		
-                .style("opacity", 1);
-                let editName = ''
-                if (d.data.name) {
-                    if (d.data.name.length < 25){
-                        editName = d.data.name
-                    } else {
-                        editName = d.data.name.slice(0,23) + '...'
-                    };	
-                };
+            d3.select(this)
+            .style('stroke', 'purple')
+            .attr("fill-opacity", 1)
+            .transition()
+            .duration(200)
+            .attr("stroke-width", 3)
+            div.transition()		
+            .duration(200)		
+            .style("opacity", 1);
+            let editName = ''
+            if (d.data.name) {
+                if (d.data.name.length < 25){
+                    editName = d.data.name
+                } else {
+                     editName = d.data.name.slice(0,23) + '...'
+                };	
+            };
                 div	.html(editName)
-                // .style("left", (d3.event.pageX) + "px")		
-                // .style("top", (d3.event.pageY - 28) + "px");	
-                
-                // .append('text')
-                // .text(d => d.data.name)
-                // .attr("fill-opacity", 1);
-                // div.html(`${d.genreName}: ${d.count}`)
-                // .style('mix-blend-mode', 'screen')
-                // .style("isolation", "isolate")
         }
 
         function handleMouseOut(d, i) {
@@ -330,20 +341,17 @@
                 .duration(200)		
                 .style("opacity", 0);
         }   
-
-
-
-
         svg.attr('viewBox', autoBox);
     }
+
     let dataObj = {}
     dataObj.name = 'genreCollectionName';
     dataObj.children = [];
 
     Object.keys(genreCollection).forEach(genre => {
-        // dataObj.children.push({name: genreCollection[genre].genreName, value: genreCollection[genre].count})
         dataObj.children.push({name: genreCollection[genre].genreName, children: [] });
     })
+
     trackAttributes.forEach(track => {
         track.genres.forEach(genre => {
             dataObj.children.forEach(child => {
@@ -353,6 +361,7 @@
             })
         })
     })
+
     createSVG();
     createPie(dataObj);
 </script>

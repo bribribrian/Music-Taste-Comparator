@@ -345,6 +345,37 @@ li::before {
     display: flex;
     height: 90%;
 }
+.comparative-data-output {
+    display: flex;
+    padding: 10px;
+}
+.top-genre-container {
+    display: flex;
+    flex-direction: column;
+}
+.top-genre-title {
+    padding: 10px;
+    display: flex;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: rgb(250, 202, 226);
+    margin: 0 auto;
+}
+.top-genre {
+    display: inline-block;
+    text-align: center;
+    color: aquamarine; 
+    font-size: 32px;
+    font-family: 'Open Sans Condensed', sans-serif;
+    background-color: black;
+    border: 2px solid aquamarine;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-top: 5px;
+    height: 30px;;
+}
 .mid-bottom-line {
     width: 90%;
     border-top: 2px solid aquamarine;
