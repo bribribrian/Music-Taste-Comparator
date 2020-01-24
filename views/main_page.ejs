@@ -65,7 +65,7 @@
                         <form class='search-form' id="searchForm">
                             <div class='search-form-elements'>
                                 <div class='enter-username'>ENTER A USERNAME:</div>
-                                <input class='input' id='searchUser' type='text' value='username'></input>
+                                <input class='input' id='searchUser' type='text' value='username' spellcheck='false'></input>
                                 <input class='submit-button' type='submit' value='SUBMIT'></input>
                             </div>
                         </form>
@@ -186,7 +186,7 @@
             });
             let compareObj = {};
             let compareArr = [];
-
+            let percentCommon = 0;
             Object.values(dataObj.children).forEach((genreObj1, index) => {
                 // console.log(genreObj1.name);
                 // console.log(index);
@@ -209,15 +209,31 @@
                 compareArr.push([newObj.children[index].name, newObj.children[index].children.length/compVar])
                 }
                 compareArr.sort(function(a, b) {return b[1] - a[1]});
+                percentCommon = Math.ceil((compareArr.length/newObj.children.length) * 100) + '%';
             });
+            console.log(newObj);
             console.log(compareArr);
             // console.log(newObj);
             document.getElementById("canvas").innerHTML = "";
             document.getElementById("comparativedata").innerHTML = 
                 `<div class='comparative-data-output'>
-                    <div class='top-genre-container'>
-                        <div class='top-genre-title'>Most Compatable Genre:</div>
-                        <div class='top-genre'>${compareArr[0][0]}</div>
+                    <div class='comparative-genre-container'>
+                        <div class='top-genre-container'>
+                            <div class='top-genre-title'>Most Compatable Genre:</div>
+                            <div class='top-genre'>${compareArr[0][0]}</div>
+                        </div>
+                        <div class='common-genre-container'>
+                            <div class='common-genre-title'>Total Genres In Common:</div>
+                            <div class='common-genre'>${compareArr.length}</div>
+                        </div>
+                        <div class='count-genre-container'>
+                            <div class='count-genre-title'>Total Genres Represented:</div>
+                            <div class='count-genre'>${newObj.children.length}</div>
+                        </div>
+                        <div class='percent-container'>
+                            <div class='percent-title'>Commonality:</div>
+                            <div class='percent'>${percentCommon}</div>
+                        </div>
                     </div>
                 </div>`
             createSVG();
@@ -288,13 +304,13 @@
         const root = partition(data);
         
         svg.append('g')
-            .attr('fill-opacity', .7)
+            .attr('fill-opacity', .8)
             .selectAll('path')
             .data(root.descendants().filter(d => d.depth))
             .enter().append('path')
             .attr('fill', d => { while ( d.depth > 1 ) d = d.parent; return color(d.data.name); })
             .attr('d', arc)
-            .attr('fill-opacity', .7)
+            .attr('fill-opacity', .8)
             .style('stroke', 'transparent')
             .on("mouseover", handleMouseOver)
             .on("mouseout", handleMouseOut)
