@@ -75,13 +75,21 @@ module.exports.spotifyAuth = function (req, res) {
                         track.genres = data.body.artists[idx].genres
                     });
                     let genre_collection = {};
+                    let currentUserWordCount = {};
                     tracks_audiodata.forEach(track_obj => {
                         track_obj.genres.forEach(genre => {
                             if(genre_collection[genre]){
                                 genre_collection[genre].count++;
                             } else {
                                 genre_collection[genre] = {genreName: genre, count: 1};
-                            }
+                            };
+                            genre.split(' ').forEach(word => {
+                                if(currentUserWordCount[word]){
+                                    currentUserWordCount[word].count++;
+                                } else {
+                                    currentUserWordCount[word] = {word: word, count: 1};
+                                };
+                            });
                         });
                     });
                     // genre_collection = Object.values(genre_collection).map((obj, idx) => {
@@ -91,6 +99,7 @@ module.exports.spotifyAuth = function (req, res) {
 
                     req.session.genres_collection = genre_collection;
                     req.session.tracks_audiodata = tracks_audiodata;
+                    req.session.currentUserWordCount = currentUserWordCount;
                     res.redirect('/app');
                 });
             });

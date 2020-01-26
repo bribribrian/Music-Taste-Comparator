@@ -87,7 +87,11 @@
                     </div>
                     <div class='mid-bottom-outer'>
                         <div class='mid-bottom-inner'>
-                            <div class='mid-bottom-body' id='comparativedata'></div>
+                            <div class='mid-bottom-body'>
+                                <div class='mid-bottom-body-left' id='current-user-data'></div>
+                                <div class='mid-bottom-body-mid' id='comparative-data'></div>
+                                <div class='mid-bottom-body-right'id='comparative-data2'></div>
+                            </div>
                             <div class='mid-bottom-line'></div>
                             <div class='footer'>
                                 <div class='footer-info'>
@@ -142,16 +146,50 @@
     function ajaxSuccess() {
         if (this.status >= 200 && this.status < 400) {
             const data = JSON.parse(this.response);
-            console.log(data);
-            let htmlOutput2 = "<div class='top-tracks-title'>Your Friend's Tracks:</div><div class='top-tracks-title-line'></div><ul class='tracks-ul'>";
-            data.tracks_audiodata.forEach(track => {
-                 htmlOutput2 += `<li class='track-name'>${track.name}</li>`;
+            // console.log("this is the ajax response data");
+            // console.log(data);
+            let htmlOutput3 = "<div class='top-tracks-title'>Your Friend's Tracks:</div><div class='top-tracks-title-line'></div><ul class='tracks-ul'>";
+            data.searchedUserTracksAudioData.forEach(track => {
+                 htmlOutput3 += `<li class='track-name'>${track.name}</li>`;
             });
-            htmlOutput2 += "</ul>";
-            document.getElementById("trackinfo2").innerHTML = htmlOutput2;
-            const genre_collection2 = data.genre_collection2;
+            htmlOutput3 += "</ul>";
+            document.getElementById("trackinfo2").innerHTML = htmlOutput3;
+
+            const searchedUserWordCount = data.searchedUserWordCount;
+            // console.log('this is searchedUserWordCount')
+            // console.log(searchedUserWordCount);
+            // console.log('currentUserWordCount');
+            // console.log(currentUserWordCount);
+            let sortedSearchedUserWordCount = Object.values(searchedUserWordCount).sort(function(a, b) {return b.count - a.count});
+            // console.log(sortedSearchedUserWordCount);
+            let comparedUsersWordCount = {};
+            sortedSearchedUserWordCount.forEach(word => {
+                // console.log('word');
+                // console.log(word);
+                if(currentUserWordCount[word.word]) {
+                    comparedUsersWordCount[word.word] = {word: word.word, count: currentUserWordCount[word.word].count + searchedUserWordCount[word.word].count}
+                };
+            })
+            // console.log('comparedwordcount');
+            // console.log(comparedUsersWordCount);
+            let sortedComparedUsersWordCount = Object.values(comparedUsersWordCount).sort(function(a, b) {return b.count - a.count});
+
+
+            let searchedUserArtistCount = [];
+            let searchedUserTracksAudioData = data.searchedUserTracksAudioData;
+            searchedUserTracksAudioData.forEach(track => {
+                if(searchedUserArtistCount[track.artists[0].name]){
+                    searchedUserArtistCount[track.artists[0].name].count++;
+                } else {
+                    searchedUserArtistCount[track.artists[0].name] = {name: track.artists[0].name, count: 1};
+                };
+            });
+            let sortedSearchedUserArtistCount = Object.values(searchedUserArtistCount).sort(function(a, b) {return b.count - a.count});
+            console.log(sortedSearchedUserArtistCount);
+
+            const searchedUserGenreCollection = data.searchedUserGenreCollection;
             document.getElementById('canvas').innerHTML = '';
-            Object.values(genre_collection2).forEach(genre_obj => {
+            Object.values(searchedUserGenreCollection).forEach(genre_obj => {
                 if (genreCollection[genre_obj.genreName]) {
                     genreCollection[genre_obj.genreName].count++;
                 } else {
@@ -163,42 +201,34 @@
                 return obj;
             });
             let objChildrenArray = Array.from(dataObj.children);
-            let newObj = {name: "genreCollectionName", children: objChildrenArray};
-            newObj.children.forEach((child, idx) => {
+            let combinedCollectionsObj = {name: "combinedUsersCollection", children: objChildrenArray};
+            combinedCollectionsObj.children.forEach((child, idx) => {
                 let newChildObj = {name: child.name, children: Array.from(child.children)};
-                newObj.children[idx] = newChildObj;
+                combinedCollectionsObj.children[idx] = newChildObj;
             });
-            console.log("this is the newObj");
-            console.log(newObj);
-            console.log("this is the dataObj - orig data")
-            console.log(dataObj);
-            Object.keys(genre_collection2).forEach(key => {
-                newObj.children.push({name: genre_collection2[key].name, children: []})
+            // console.log("this is the combinedCollectionsObj");
+            // console.log(combinedCollectionsObj);
+            // console.log("this is the dataObj - orig data")
+            // console.log(dataObj);
+            Object.keys(searchedUserGenreCollection).forEach(key => {
+                combinedCollectionsObj.children.push({name: searchedUserGenreCollection[key].name, children: []})
             });
-            data.tracks_audiodata.forEach(track => {
+            data.searchedUserTracksAudioData.forEach(track => {
                 track.genres.forEach(genre => {
-                    newObj.children.forEach(child => {
+                    combinedCollectionsObj.children.forEach(child => {
                         if (child.name === genre) {
-                            child.children.push({name: track.name, value: 1})
-                        }
+                            child.children.push({name: track.name, value: 1, artist: track.artists[0].name});
+                        };
                     });
                 });
             });
-            let compareObj = {};
+            // let compareObj = {};
             let compareArr = [];
             let percentCommon = 0;
             Object.values(dataObj.children).forEach((genreObj1, index) => {
-                // console.log(genreObj1.name);
-                // console.log(index);
-                // console.log(genreObj1.children.length)
-                // console.log(genreObj1.children.length);
-                // console.log(newObj.children[index].name);
-                // console.log(newObj.children[index].children.length);
-                // console.log("difference");
-                // console.log(newObj.children[index].children.length - genreObj1.children.length);
-                if (newObj.children[index].children.length/genreObj1.children.length > 1) {
+                if (combinedCollectionsObj.children[index].children.length/genreObj1.children.length > 1) {
                 // compareObj[newObj.children[index].name] = 2 - (newObj.children[index].children.length/genreObj1.children.length);
-                    let compVar = 2 - (newObj.children[index].children.length/genreObj1.children.length); 
+                    let compVar = 2 - (combinedCollectionsObj.children[index].children.length/genreObj1.children.length); 
                     if (compVar < 0) {
                         compVar = -1 * compVar;
                     } else if (compVar === 0) {
@@ -206,16 +236,20 @@
                     } else {
                         compVar = compVar;
                     }
-                compareArr.push([newObj.children[index].name, newObj.children[index].children.length/compVar])
+                compareArr.push([combinedCollectionsObj.children[index].name, combinedCollectionsObj.children[index].children.length/compVar])
                 }
                 compareArr.sort(function(a, b) {return b[1] - a[1]});
-                percentCommon = Math.ceil((compareArr.length/newObj.children.length) * 100) + '%';
+                percentCommon = Math.ceil((compareArr.length/combinedCollectionsObj.children.length) * 100) + '%';
             });
-            console.log(newObj);
-            console.log(compareArr);
+            // console.log(newObj);
+            // console.log("this is the compareArr");
+            // console.log(compareArr);
+            // console.log('this is the sortedCurrentUserWordCount');
+            // console.log(sortedCurrentUserWordCount);
+
             // console.log(newObj);
             document.getElementById("canvas").innerHTML = "";
-            document.getElementById("comparativedata").innerHTML = 
+            document.getElementById("comparative-data").innerHTML = 
                 `<div class='comparative-data-output'>
                     <div class='comparative-genre-container'>
                         <div class='top-genre-container'>
@@ -228,16 +262,37 @@
                         </div>
                         <div class='count-genre-container'>
                             <div class='count-genre-title'>Total Genres Represented:</div>
-                            <div class='count-genre'>${newObj.children.length}</div>
+                            <div class='count-genre'>${combinedCollectionsObj.children.length}</div>
                         </div>
                         <div class='percent-container'>
                             <div class='percent-title'>Commonality:</div>
                             <div class='percent'>${percentCommon}</div>
                         </div>
                     </div>
-                </div>`
+                </div>`;
+            document.getElementById("comparative-data2").innerHTML = 
+                `<div class='comparative-data-output'>
+                    <div class='comparative-genre-container'>
+                        <div class='top-genre-container'>
+                            <div class='top-genre-title'>Most Compatable Genre:</div>
+                            <div class='top-genre'>${sortedSearchedUserArtistCount[0].name}</div>
+                        </div>
+                        <div class='common-genre-container'>
+                            <div class='common-genre-title'>Total Genres In Common:</div>
+                            <div class='common-genre'>${compareArr.length}</div>
+                        </div>
+                        <div class='count-genre-container'>
+                            <div class='count-genre-title'>Keyword Combined:</div>
+                            <div class='count-genre'>${sortedComparedUsersWordCount[0].word}</div>
+                        </div>
+                        <div class='percent-container'>
+                            <div class='percent-title'>Searched Users Keyword:</div>
+                            <div class='percent'>${sortedSearchedUserWordCount[0].word}</div>
+                        </div>
+                    </div>
+                </div>`;
             createSVG();
-            createPie(newObj);
+            createPie(combinedCollectionsObj);
         } else {
         // error
         }
@@ -246,20 +301,23 @@
 
     const trackAttributes = <%- JSON.stringify(tracks_audiodata) %>;
     const genreCollection = <%- JSON.stringify(genre_collection) %>;
-    console.log(genreCollection);
-    console.log(trackAttributes);
+    const currentUserWordCount = <%- JSON.stringify(currentUserWordCount) %>;
+    // console.log('this is the original genreCollection Obj');
+    // console.log(genreCollection);
+    // console.log('this is the original trackAttributes');
+    // console.log(trackAttributes);
     const genreCollectionArray1 = Object.values(JSON.parse(JSON.stringify(genreCollection))).map((obj, idx) => {
         obj.genreCode = idx;
         return obj;
     }); 
-    let htmlOutput = "<div class='top-tracks-title'>Your Top Tracks:</div><div class='top-tracks-title-line'></div><ul class='tracks-ul'>";
+    let htmlOutput1 = "<div class='top-tracks-title'>Your Top Tracks:</div><div class='top-tracks-title-line'></div><ul class='tracks-ul'>";
     trackAttributes.forEach(trackInfo => {
-        htmlOutput += `<li class='track-name'>${trackInfo.name}</li>`;
+        htmlOutput1 += `<li class='track-name'>${trackInfo.name}</li>`;
     });
-    htmlOutput += "</ul>";
+    htmlOutput1 += "</ul>";
     
-    document.getElementById("trackinfo").innerHTML = htmlOutput;
-     
+    document.getElementById('trackinfo').innerHTML = htmlOutput1;
+    // document.getElementById('');
     function createSVG() {
         svg = d3.select(".canvas")
         .append("svg")
@@ -361,23 +419,64 @@
     }
 
     let dataObj = {}
-    dataObj.name = 'genreCollectionName';
+    dataObj.name = 'curruentUserCollection';
     dataObj.children = [];
 
     Object.keys(genreCollection).forEach(genre => {
         dataObj.children.push({name: genreCollection[genre].genreName, children: [] });
     })
-
+    console.log('this is the current users trackAttributes');
+    console.log(trackAttributes);
+    let currentUserArtistCount = [];
     trackAttributes.forEach(track => {
+        if(currentUserArtistCount[track.artists[0].name]){
+            currentUserArtistCount[track.artists[0].name].count++;
+        } else {
+            currentUserArtistCount[track.artists[0].name] = {name: track.artists[0].name, count: 1};
+        };
         track.genres.forEach(genre => {
             dataObj.children.forEach(child => {
                 if (child.name === genre) {
-                    child.children.push({name: track.name, value: 1})
-                }
-            })
-        })
-    })
+                    child.children.push({name: track.name, value: 1, artist: track.artists[0].name});
+                };
+            });
+        });
+    });
+    console.log(currentUserArtistCount);
+    let sortedCurrentUserArtistCount = Object.values(currentUserArtistCount).sort(function(a, b) {return b.count - a.count});
+    console.log(sortedCurrentUserArtistCount);
+    console.log(dataObj);
+    let sortedDataObj = Object.values(dataObj.children).sort(function(a, b) {return b.children.length - a.children.length});
+    let sortedCurrentUserWordCount = Object.values(currentUserWordCount).sort(function(a, b) {return b.count - a.count});
+    let htmlOutput2 = 
+        `<div class='comparative-data-output'>
+            <div class='comparative-genre-container'>
+                <div class='top-genre-container'>
+                    <div class='top-genre-title'>Your Current Favorite Artist:</div>
+                    <div class='top-genre'>${sortedCurrentUserArtistCount[0].name}</div>
+                </div>
+                <div class='common-genre-container'>
+                    <div class='common-genre-title'>Songs by ${sortedCurrentUserArtistCount[0].name}:</div>
+                    <div class='common-genre'>${sortedCurrentUserArtistCount[0].count}</div>
+                </div>
+                <div class='count-genre-container'>
+                    <div class='count-genre-title'>Your Favorite Genre:</div>
+                    <div class='count-genre'>${sortedDataObj[0].name}</div>
+                </div>
+                <div class='percent-container'>
+                    <div class='percent-title'>Your Most Common Keyword:</div>
+                    <div class='percent'>${sortedCurrentUserWordCount[0].word}</div>
+                </div>
+            </div>
+        </div>`;
+    // console.log(currentUserWordCount);
+    // console.log(sortedDataObj);
+    document.getElementById('current-user-data').innerHTML = htmlOutput2;
 
+    // console.log('this is the currentUserArtistCount');
+    // console.log(currentUserArtistCount);
+    // console.log('this is the current user dataObj');
+    // console.log(dataObj);
     createSVG();
     createPie(dataObj);
 </script>

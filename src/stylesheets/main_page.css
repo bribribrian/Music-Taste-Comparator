@@ -360,12 +360,22 @@ li::before {
     height: 100%;
     border: 2px solid aquamarine;
     flex-direction: column;
+    align-items: center;
 }
 .mid-bottom-body {
     display: flex;
     height: 90%;
     align-items: center;
     justify-content: center;
+    width: 100%;
+}
+.mid-bottom-body-left {
+    display: flex;
+    width: 33%;
+}
+.mid-bottom-body-mid {
+    display: flex;
+    width: 33%;
 }
 .comparative-data-output {
     display: flex;
@@ -497,6 +507,10 @@ li::before {
     width: 50px;
     height: 50px;
     align-items: center;
+}
+.mid-bottom-body-right {
+    display: flex;
+    width: 33%;
 }
 .mid-bottom-line {
     width: 90%;
