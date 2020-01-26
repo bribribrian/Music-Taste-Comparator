@@ -27,8 +27,6 @@
                 </div>
                 <div class='demo-container-outer'>
                     <div class='demo-container-inner'>
-                        <!-- <div class='demo'>For demo purposes, try searching: bribrianbribri, keenannichols, diggin11</div>
-                        <div class='instructions'>Tell your friends to make playlist "Top songs of 2019" public, then search</div> -->
                         <div class='instructions'>INSTRUCTIONS
                             <div class='instructions-dropdown'>
                                 <div class='instructions-p'>
@@ -73,7 +71,6 @@
                 </div>
             </div>
 
-
             <div class='main-body-container'>
                 <div class='track-info-container-border-outer'>
                     <div class='track-info-container-border'>
@@ -106,7 +103,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class='track-info-container-border-outer'>
                     <div class='track-info-container-border'>
                         <div class='track-info-container2' id='trackinfo2' class='trackinfo2'></div>
@@ -252,42 +248,48 @@
             document.getElementById("comparative-data").innerHTML = 
                 `<div class='comparative-data-output'>
                     <div class='comparative-genre-container'>
-                        <div class='top-genre-container'>
-                            <div class='top-genre-title'>Most Compatable Genre:</div>
-                            <div class='top-genre'>${compareArr[0][0]}</div>
-                        </div>
-                        <div class='common-genre-container'>
-                            <div class='common-genre-title'>Total Genres In Common:</div>
-                            <div class='common-genre'>${compareArr.length}</div>
-                        </div>
-                        <div class='count-genre-container'>
-                            <div class='count-genre-title'>Total Genres Represented:</div>
-                            <div class='count-genre'>${combinedCollectionsObj.children.length}</div>
-                        </div>
-                        <div class='percent-container'>
-                            <div class='percent-title'>Commonality:</div>
-                            <div class='percent'>${percentCommon}</div>
+                        <div class='user-stats-title3'>Comparison</div>
+                            <div class='user-stats-container3'>
+                                <div class='top-genre-container'>
+                                    <div class='top-genre-title'>Compatable Genre:</div>
+                                    <div class='top-genre'>${compareArr[0][0]}</div>
+                                </div>
+                                <div class='common-genre-container'>
+                                    <div class='common-genre-title'>Common Genres:</div>
+                                    <div class='common-genre'>${compareArr.length}</div>
+                                </div>
+                                <div class='count-genre-container'>
+                                    <div class='count-genre-title'>Genres Represented:</div>
+                                    <div class='count-genre'>${combinedCollectionsObj.children.length}</div>
+                                </div>
+                                <div class='percent-container'>
+                                    <div class='percent-title'>Commonality:</div>
+                                    <div class='percent'>${percentCommon}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>`;
             document.getElementById("comparative-data2").innerHTML = 
                 `<div class='comparative-data-output'>
                     <div class='comparative-genre-container'>
-                        <div class='top-genre-container'>
-                            <div class='top-genre-title'>Most Compatable Genre:</div>
-                            <div class='top-genre'>${sortedSearchedUserArtistCount[0].name}</div>
+                        <div class='user-stats-title2'>${searchUser.value}'s</div>
+                        <div class='user-stats-container2'>
+                            <div class='top-genre-container2'>
+                                <div class='top-genre-title'>Top Artist:</div>
+                                <div class='count-genre'>${sortedSearchedUserArtistCount[0].name}</div>
+                            </div>
+                            <div class='count-genre-container2'>
+                                <div class='count-genre-title'>Keyword Combined:</div>
+                                <div class='percent'>${sortedComparedUsersWordCount[0].word}</div>
+                            </div>
+                            <div class='percent-container2'>
+                                <div class='percent-title'>Keyword:</div>
+                                <div class='common-genre'>${sortedSearchedUserWordCount[0].word}</div>
+                            </div>
                         </div>
-                        <div class='common-genre-container'>
-                            <div class='common-genre-title'>Total Genres In Common:</div>
-                            <div class='common-genre'>${compareArr.length}</div>
-                        </div>
-                        <div class='count-genre-container'>
-                            <div class='count-genre-title'>Keyword Combined:</div>
-                            <div class='count-genre'>${sortedComparedUsersWordCount[0].word}</div>
-                        </div>
-                        <div class='percent-container'>
-                            <div class='percent-title'>Searched Users Keyword:</div>
-                            <div class='percent'>${sortedSearchedUserWordCount[0].word}</div>
+                        <div class='suggested-tracks-container'>
+                            <div class='suggested-tracks-button'>Suggested Tracks</div>
                         </div>
                     </div>
                 </div>`;
@@ -451,21 +453,24 @@
     let htmlOutput2 = 
         `<div class='comparative-data-output'>
             <div class='comparative-genre-container'>
-                <div class='top-genre-container'>
-                    <div class='top-genre-title'>Your Current Favorite Artist:</div>
-                    <div class='top-genre'>${sortedCurrentUserArtistCount[0].name}</div>
-                </div>
-                <div class='common-genre-container'>
-                    <div class='common-genre-title'>Songs by ${sortedCurrentUserArtistCount[0].name}:</div>
-                    <div class='common-genre'>${sortedCurrentUserArtistCount[0].count}</div>
-                </div>
-                <div class='count-genre-container'>
-                    <div class='count-genre-title'>Your Favorite Genre:</div>
-                    <div class='count-genre'>${sortedDataObj[0].name}</div>
-                </div>
-                <div class='percent-container'>
-                    <div class='percent-title'>Your Most Common Keyword:</div>
-                    <div class='percent'>${sortedCurrentUserWordCount[0].word}</div>
+                <div class='user-stats-title'>Your Stats</div>
+                    <div class='user-stats-container'>
+                    <div class='top-genre-container'>
+                        <div class='top-genre-title'>Favorite Artist:</div>
+                        <div class='common-genre'>${sortedCurrentUserArtistCount[0].name}</div>
+                    </div>
+                    <div class='common-genre-container'>
+                        <div class='common-genre-title'>${sortedCurrentUserArtistCount[0].name} Songs:</div>
+                        <div class='percent'>${sortedCurrentUserArtistCount[0].count}</div>
+                    </div>
+                    <div class='count-genre-container'>
+                        <div class='count-genre-title'>Favorite Genre:</div>
+                        <div class='top-genre'>${sortedDataObj[0].name}</div>
+                    </div>
+                    <div class='percent-container'>
+                        <div class='percent-title'>Most Common Keyword:</div>
+                        <div class='count-genre'>${sortedCurrentUserWordCount[0].word}</div>
+                    </div>
                 </div>
             </div>
         </div>`;
