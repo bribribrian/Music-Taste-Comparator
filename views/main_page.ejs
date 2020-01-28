@@ -12,6 +12,7 @@
   <link rel='stylesheet' href='/stylesheets/reset.css' />
   <link rel='stylesheet' href='/stylesheets/main_page.css' />
   <link rel='stylesheet' href='/stylesheets/suggested_tracks.css' />
+  <link rel='stylesheet' href='/stylesheets/mid_container.css' />
   <script src="https://kit.fontawesome.com/12ffa399b2.js" crossorigin="anonymous"></script>
 </head>
 
@@ -253,9 +254,18 @@
             suggestedTracksArr = suggestedTracksArr.slice(0,5);
             let htmlOutput4 = "<div class='suggested-tracks-ul-div'><ul class='suggested-tracks-ul'>";
             suggestedTracksArr.forEach(track => {
-                 htmlOutput4 += `<li class='suggested-track'>${track.name} by ${track.artist}</li>`;
+                 htmlOutput4 += `<li class='suggested-track'>${track.name} <span class='suggested-track-by'> by </span> ${track.artist}</li>`;
             });
             htmlOutput4 += "</ul>";
+
+            let searchedUserTopArtistHtmlOutput = '';
+            if (sortedSearchedUserArtistCount[0].name.length <= 4) {
+                searchedUserTopArtistHtmlOutput = `<div class='searched-user-top-artist1'>${sortedSearchedUserArtistCount[0].name}</div>`;
+            } else if (sortedSearchedUserArtistCount[0].name.length >= 20) {
+                searchedUserTopArtistHtmlOutput = `<div class='searched-user-top-artist3'>${sortedSearchedUserArtistCount[0].name}</div>`;
+            } else {
+                searchedUserTopArtistHtmlOutput = `<div class='searched-user-top-artist2'>${sortedSearchedUserArtistCount[0].name}</div>`;
+            };
             // console.log('this is the suggest tracks arr');
             // console.log(suggestedTracksArr);
             // console.log('this is the top genre keyed in');
@@ -300,7 +310,7 @@
                         <div class='user-stats-container2'>
                             <div class='top-genre-container2'>
                                 <div class='top-genre-title'>Top Artist:</div>
-                                <div class='count-genre'>${sortedSearchedUserArtistCount[0].name}</div>
+                                <div class='searched-user-top-artist' id='searched-user-top-artist'></div>
                             </div>
                             <div class='count-genre-container2'>
                                 <div class='count-genre-title'>Keyword Combined:</div>
@@ -327,6 +337,7 @@
                     </div>
                 </div>`;
             document.getElementById("suggested-tracks-content").innerHTML = htmlOutput4;
+            document.getElementById("searched-user-top-artist").innerHTML = searchedUserTopArtistHtmlOutput;
             createSVG();
             createPie(combinedCollectionsObj);
         } else {
