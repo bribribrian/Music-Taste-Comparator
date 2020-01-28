@@ -1,0 +1,101 @@
+.suggested-tracks-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 25%;
+    justify-content: center;
+    text-align: center;
+    
+}
+.suggested-tracks-button{
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 33px;
+    margin-top: 5px;
+    background-color: aquamarine;
+    /* height: 100%;
+    width: 100%; */
+    border: 5px solid rgb(250, 202, 226);
+    line-height: 31px;
+    letter-spacing: -2px;
+    padding: 5px;
+    position: relative;
+}
+.tracks {
+    font-size: 48px;
+}
+
+.suggested-tracks-button:hover {
+    color: aquamarine;
+    background-color: rgb(250, 202, 226);
+    border: 5px solid aquamarine;
+}
+.suggested-tracks-button:hover .suggested-tracks-dropdown{
+    display: block;
+    height: 307px;
+}
+
+.suggested-tracks-dropdown{
+    display: none;
+    position: absolute;
+    background-color: black;
+    border: 3px solid aquamarine;
+    z-index: 1;
+    /* height: 200px;
+    width: 200px; */
+    /* top: 739px; */
+    /* right: 330px; */
+    top: -339px;
+    right: -13px;
+    width: 455px;
+    /* height: ; */
+}
+.suggested-tracks-dropdown .suggested-tracks-p:after {
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: -45px;
+    right: 1px;
+    border-width: 30px 70px 0px 0px;
+    border-style: solid;
+    border-color: black transparent;
+    padding-top: 20px;
+  }
+  .suggested-tracks-dropdown .suggested-tracks-p:before {
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: -29px;
+    right: 3px;
+    border-width: 28px 70px 0px 2px;
+    border-style: solid;
+    border-color: aquamarine transparent;
+  }
+  
+  .suggested-tracks-title {
+    padding: 9px;
+    display: flex;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: aquamarine;
+    margin-left: 37px;
+  }
+  .suggested-tracks-line {
+    width: 77%;
+    border-top: 2px solid aquamarine;
+    margin-left: 23px;
+  }
+
+  .suggested-tracks-content {
+    margin-top: 15px;
+    font-family: 'Noto Serif', serif;
+    font-size: 12px;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-bottom: 15px;
+    max-width: 200px;
+    color: rgb(250, 202, 226);
+    line-height: 1.2;
+  }

@@ -11,6 +11,7 @@
   </title>
   <link rel='stylesheet' href='/stylesheets/reset.css' />
   <link rel='stylesheet' href='/stylesheets/main_page.css' />
+  <link rel='stylesheet' href='/stylesheets/suggested_tracks.css' />
   <script src="https://kit.fontawesome.com/12ffa399b2.js" crossorigin="anonymous"></script>
 </head>
 
@@ -196,24 +197,27 @@
                 obj.genreCode = idx;
                 return obj;
             });
+            // let newChildObj = {};
             let objChildrenArray = Array.from(dataObj.children);
             let combinedCollectionsObj = {name: "combinedUsersCollection", children: objChildrenArray};
             combinedCollectionsObj.children.forEach((child, idx) => {
                 let newChildObj = {name: child.name, children: Array.from(child.children)};
                 combinedCollectionsObj.children[idx] = newChildObj;
             });
+            // console.log('this is newChildObj');
+            // console.log(newChildObj);
             // console.log("this is the combinedCollectionsObj");
             // console.log(combinedCollectionsObj);
             // console.log("this is the dataObj - orig data")
             // console.log(dataObj);
             Object.keys(searchedUserGenreCollection).forEach(key => {
-                combinedCollectionsObj.children.push({name: searchedUserGenreCollection[key].name, children: []})
+                combinedCollectionsObj.children.push({name: searchedUserGenreCollection[key].name, children: []});
             });
             data.searchedUserTracksAudioData.forEach(track => {
                 track.genres.forEach(genre => {
                     combinedCollectionsObj.children.forEach(child => {
                         if (child.name === genre) {
-                            child.children.push({name: track.name, value: 1, artist: track.artists[0].name});
+                            child.children.push({name: track.name, value: 1, artist: track.artists[0].name, source: 'searchedUser'});
                         };
                     });
                 });
@@ -221,6 +225,8 @@
             // let compareObj = {};
             let compareArr = [];
             let percentCommon = 0;
+            console.log('this is combinedCollectionsObj');
+            console.log(combinedCollectionsObj);
             Object.values(dataObj.children).forEach((genreObj1, index) => {
                 if (combinedCollectionsObj.children[index].children.length/genreObj1.children.length > 1) {
                 // compareObj[newObj.children[index].name] = 2 - (newObj.children[index].children.length/genreObj1.children.length);
@@ -232,11 +238,28 @@
                     } else {
                         compVar = compVar;
                     }
-                compareArr.push([combinedCollectionsObj.children[index].name, combinedCollectionsObj.children[index].children.length/compVar])
+                compareArr.push([combinedCollectionsObj.children[index].name, combinedCollectionsObj.children[index].children.length/compVar, combinedCollectionsObj.children[index].children])
                 }
                 compareArr.sort(function(a, b) {return b[1] - a[1]});
                 percentCommon = Math.ceil((compareArr.length/combinedCollectionsObj.children.length) * 100) + '%';
             });
+            let suggestedTracksArr = [];
+            let increment;
+            for (increment = 0; increment < compareArr[0][2].length; increment++) {
+                if (compareArr[0][2][increment].source === 'searchedUser') {
+                    suggestedTracksArr.push(compareArr[0][2][increment]);
+                };
+            };
+            suggestedTracksArr = suggestedTracksArr.slice(0,5);
+            let htmlOutput4 = "<div class='suggested-tracks-ul-div'><ul class='suggested-tracks-ul'>";
+            suggestedTracksArr.forEach(track => {
+                 htmlOutput4 += `<li class='suggested-track'>${track.name} by ${track.artist}</li>`;
+            });
+            htmlOutput4 += "</ul>";
+            // console.log('this is the suggest tracks arr');
+            // console.log(suggestedTracksArr);
+            // console.log('this is the top genre keyed in');
+            // console.log(combinedCollectionsObj);
             // console.log(newObj);
             // console.log("this is the compareArr");
             // console.log(compareArr);
@@ -289,10 +312,21 @@
                             </div>
                         </div>
                         <div class='suggested-tracks-container'>
-                            <div class='suggested-tracks-button'>Suggested Tracks</div>
+                            <div class='suggested-tracks-button'>SUGGESTED <span class='tracks'>TRACKS</span>
+                                <div class='suggested-tracks-dropdown'>
+                                    <div class='suggested-tracks-p'>
+                                        <div class='suggested-tracks-title'>
+                                            Suggested Tracks:
+                                        </div>
+                                        <div class='suggested-tracks-line'></div>
+                                        <div class='suggested-tracks-content' id='suggested-tracks-content'></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>`;
+            document.getElementById("suggested-tracks-content").innerHTML = htmlOutput4;
             createSVG();
             createPie(combinedCollectionsObj);
         } else {
@@ -439,7 +473,7 @@
         track.genres.forEach(genre => {
             dataObj.children.forEach(child => {
                 if (child.name === genre) {
-                    child.children.push({name: track.name, value: 1, artist: track.artists[0].name});
+                    child.children.push({name: track.name, value: 1, artist: track.artists[0].name, source: 'currentUser'});
                 };
             });
         });
