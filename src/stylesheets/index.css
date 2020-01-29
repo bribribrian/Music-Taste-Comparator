@@ -1,4 +1,194 @@
-body {
-    color: black;
-    background-color: white
+html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+body {
+    display: flex;
+    color: aquamarine;
+    background-color: black;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+.outer-container {
+    background-color: rgb(250, 202, 226);
+    padding: 15px;
+    display: flex;
+    border-radius: 10px;
+    /* border: 2px solid aquamarine; */
+}
+.login-container {
+    display: flex;
+    border: 5px solid aquamarine;
+    /* width: 200px; */
+    background-color: black;
+
+}
+.login-container2 {
+    display: flex;
+    border: 5px solid rgb(83,247,112, .9);
+}
+.login-container3 {
+    display: flex;
+    border: 5px solid rgb(255,157,115, .97);
+}
+.login-container4 {
+    display: flex;
+    border: 5px solid rgb(75,201,203);
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+
+
+.title {
+    font-size: 30px;
+    background-color: aquamarine;
+    border: 5px solid rgb(250, 202, 226);
+    color: black;
+    font-weight: 600;
+    padding: 5px;
+    margin: 10px;
+    margin-bottom: 5px;
+    letter-spacing: -px;
+}
+.login-button {
+    font-size: 20px;
+    display: flex;
+    border: 3px solid aquamarine;
+    padding: 5px;
+    margin: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    justify-content: center;
+    background-color: rgb(250, 202, 226);
+    color: black;
+    font-weight: 600;
+}
+.login-button:hover {
+    background-color: aquamarine;
+    border: 3px solid rgb(250, 202, 226);
+    color: rgb(250, 202, 226);
+}
+.with {
+    font-size: 18px;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+    margin-left: 5px;
+    margin-right: 7px;
+    font-weight: 500;
+}
+.fab {
+    display: flex;
+    font-size: 22px;
+    /* padding-top: 2px; */
+    margin-right: 2px;
+}
+
+.demo-user-button {
+    font-size: 20px;
+    display: flex;
+    border: 3px solid aquamarine;
+    padding: 5px;
+    margin: 10px;
+    margin-top: 5px;
+    justify-content: center;
+    background-color: rgb(250, 202, 226);
+    color: black;
+    font-weight: 600;
+    width: fit-content;
+    position: relative;
+}
+.demo-user-button:hover {
+    background-color: aquamarine;
+    border: 3px solid rgb(250, 202, 226);
+    color: rgb(250, 202, 226);
+}
+
+.demo-user-button:hover .demo-user-button-dropdown{
+    display: block;
+    /* height: 307px; */
+    margin-top: 143px;
+    padding-bottom: 10px;
+}
+
+.demo-user-button-dropdown{
+    display: none;
+    position: absolute;
+    background-color: black;
+    border: 3px solid aquamarine;
+    z-index: 1;
+    /* height: 200px;
+    width: 200px; */
+    /* top: 739px; */
+    /* right: 330px; */
+    top: -319px;
+    /* right: -13px; */
+    width: 455px;
+    /* height: ; */
+    margin-top: 153px;
+}
+.demo-user-button-dropdown .demo-user-button-p:after {
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: -45px;
+    right: 83px;
+    border-width: 29px 70px 0px 0px;
+    border-style: solid;
+    border-color: black transparent;
+    padding-top: 20px;
+  }
+  .demo-user-button-dropdown .demo-user-button-p:before {
+    content: '';
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: -29px;
+    right: 86px;
+    border-width: 28px 70px 0px 0px;
+    border-style: solid;
+    border-color: aquamarine transparent;
+  }
+  .demo-user-button-p {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .demo-user-button-title {
+    display: flex;
+    padding: 9px;
+    display: flex;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: aquamarine;
+    justify-content: center;
+    letter-spacing: normal;
+  }
+  .demo-user-button-line {
+    display: flex;
+    width: 77%;
+    border-top: 2px solid aquamarine;
+  }
+
+  .demo-user-button-content {
+    display: flex;
+    margin-top: 15px;
+    color: rgb(250, 202, 226);
+    line-height: normal;
+    letter-spacing: normal;
+  }
+
+
+/* UserDemoUser01@gmail.com
+Pumpkin#33 */

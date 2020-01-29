@@ -6,49 +6,58 @@
         <title>
             Music Taste Comparator
         </title>
-        <script src="//d3js.org/d3.v5.min.js"></script>
         <link rel='stylesheet' href='/stylesheets/index.css' />
+        <script src="https://kit.fontawesome.com/12ffa399b2.js" crossorigin="anonymous"></script>
 
-        <!-- <button onclick='loginPage'>Log In</button> -->
     </head>
 
     <body>
-        <!-- <button>Log In</button> -->
+        <div class='outer-container'>
+            <div class='login-container'>
+                <div class='login-container2'>
+                    <div class='login-container3'>
+                        <div class='login-container4'>
+                            <div class='title'> MUSIC TASTE<br>COMPARATOR</div>
+                            <div class='login-button' id='log-in-button'>LOG IN <span class='with'>with</span><i class="fab fa-spotify"></i>SPOTIFY</div>
+                            <div class='demo-user-button' id='demo-user-button'>DEMO USER
+                                <div class='demo-user-button-dropdown'>
+                                    <div class='demo-user-button-p'>
+                                        <div class='demo-user-button-title'>
+                                            To Log In as Demo User:
+                                        </div>
+                                        <div class='demo-user-button-line'></div>
+                                        <div class='demo-user-button-content'>Click DEMO USER button
+                                            <br>
+                                            Enter:
+                                            <br>
+                                            Username: UserDemoUser01
+                                            <br>
+                                            Password: userdemouser01
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script>
             function loginPage() {
                 window.location.href = "/login"
-            }
+            };
+            
+            function demoUserLogIn() {
+
+            };
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const loginButton = document.getElementById("log-in-button");
+                loginButton.addEventListener("click", loginPage);
+            });
         
-        let width = Math.max(10, innerWidth),
-            height = Math.max(10, innerHeight);
-
-        let svg = d3.select("body").append("svg")
-        .attr("width", width)
-        .attr("height", height)
-
-        svg.append("rect")
-        .attr("rx", 2)
-        .attr("ry", 2)
-        .attr('x', width / 4 - 100)
-        .attr('y', height / 4 + 90)
-        .attr("width", 200)
-        .attr("height", 58)
-        .attr('stroke', "black")
-        .classed("button-outline", true)
-        .on("click", loginPage)
-        .attr("fill", "white")
-
-        svg.append("g")
-        .attr("transform",
-        "translate(" + (width / 4 - 65) + " ," +
-        (height / 4 + 125) + ")")
-        .attr('stroke', "black")
-        .classed("button-outline", true)
-        .attr('font-weight', 100)
-        .on("click", loginPage)
-        .append("text")
-        .text("Log In With Spotify")
-        .classed("button", true)
+       
 
         </script>
     </body>
