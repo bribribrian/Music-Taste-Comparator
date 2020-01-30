@@ -9,6 +9,7 @@
   <title>
     Music Taste Comparator
   </title>
+  <link rel='icon' href='icon2.png'>
   <link rel='stylesheet' href='/stylesheets/reset.css' />
   <link rel='stylesheet' href='/stylesheets/main_page.css' />
   <link rel='stylesheet' href='/stylesheets/suggested_tracks.css' />
@@ -52,6 +53,7 @@
                                     <br>
                                     For quick demo purposes, try searching some of the following users:
                                     <br>
+                                    <br>
                                     bribrianbribri
                                     <br>
                                     keenannichols
@@ -69,10 +71,36 @@
                         <form class='search-form' id="searchForm">
                             <div class='search-form-elements'>
                                 <div class='enter-username'>ENTER A USERNAME:</div>
-                                <input class='input' id='searchUser' type='text' value='username' spellcheck='false'></input>
+                                <input class='input' id='searchUser' type='text' placeholder='username' spellcheck='false'></input>
                                 <input class='submit-button' type='submit' value='SUBMIT'></input>
                             </div>
                         </form>
+                    </div>
+                    <div class='logout-container'>
+                        <a class='logout-button' href='https://accounts.spotify.com/en/logout'>
+                            <div  id='logout-button'>
+                                <i class="fas fa-power-off"></i>
+                                <div class='logout-line'></div>
+                                <div class='logout-button-dropdown'>
+                                    <div class='logout-button-p'>
+                                        <div class='logout-button-title'>
+                                            Log Out?:
+                                        </div>
+                                        <div class='logout-button-line'></div>
+                                        <div class='logout-button-content'>
+                                            This button will:
+                                            <br>
+                                            Log you out of Music Taste Comparator
+                                            <br>
+                                            &
+                                            <br>
+                                            Log you out of Spotify
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -128,6 +156,15 @@
     document.addEventListener("DOMContentLoaded", () => {
         const seachForm = document.getElementById("searchForm");
         seachForm.addEventListener("submit", handleSubmit);
+    });
+
+    function logoutPage() {
+                window.location.href = "/"
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+                const logoutButton = document.getElementById("logout-button");
+                logoutButton.addEventListener("click", logoutPage);
     });
     
     function handleSubmit (e) {
@@ -266,6 +303,16 @@
             });
             htmlOutput4 += "</ul>";
 
+            let comparedGenreHtmlOutput = '';
+            if (compareArr[0][0].length <= 4) {
+                comparedGenreHtmlOutput = `<div class='compared-genre1'>${compareArr[0][0]}</div>`;
+            } else if (compareArr[0][0].length >= 20) {
+                comparedGenreHtmlOutput = `<div class='compared-genre3'>${compareArr[0][0]}</div>`;
+            } else {
+                comparedGenreHtmlOutput = `<div class='compared-genre2'>${compareArr[0][0]}</div>`;
+            };
+
+
             let searchedUserTopArtistHtmlOutput = '';
             if (sortedSearchedUserArtistCount[0].name.length <= 4) {
                 searchedUserTopArtistHtmlOutput = `<div class='searched-user-top-artist1'>${sortedSearchedUserArtistCount[0].name}</div>`;
@@ -273,6 +320,24 @@
                 searchedUserTopArtistHtmlOutput = `<div class='searched-user-top-artist3'>${sortedSearchedUserArtistCount[0].name}</div>`;
             } else {
                 searchedUserTopArtistHtmlOutput = `<div class='searched-user-top-artist2'>${sortedSearchedUserArtistCount[0].name}</div>`;
+            };
+
+            let keywordCombinedHtmlOutput = '';
+            if (sortedComparedUsersWordCount[0].word.length <= 4) {
+                keywordCombinedHtmlOutput = `<div class='keyword-combined1'>${sortedComparedUsersWordCount[0].word}</div>`;
+            } else if (sortedComparedUsersWordCount[0].word.length >= 20) {
+                keywordCombinedHtmlOutput = `<div class='keyword-combined3'>${sortedComparedUsersWordCount[0].word}</div>`;
+            } else {
+                keywordCombinedHtmlOutput = `<div class='keyword-combined2'>${sortedComparedUsersWordCount[0].word}</div>`;
+            };
+
+            let searchedUserKeywordHtmlOutput = '';
+            if (sortedSearchedUserWordCount[0].word.length <= 4) {
+                searchedUserKeywordHtmlOutput = `<div class='searched-user-keyword1'>${sortedSearchedUserWordCount[0].word}</div>`;
+            } else if (sortedSearchedUserWordCount[0].word.length >= 20) {
+                searchedUserKeywordHtmlOutput = `<div class='searched-user-keyword3'>${sortedSearchedUserWordCount[0].word}</div>`;
+            } else {
+                searchedUserKeywordHtmlOutput = `<div class='searched-user-keyword2'>${sortedSearchedUserWordCount[0].word}</div>`;
             };
             // console.log('this is the suggest tracks arr');
             // console.log(suggestedTracksArr);
@@ -293,7 +358,7 @@
                             <div class='user-stats-container3'>
                                 <div class='top-genre-container'>
                                     <div class='top-genre-title'>Compatable Genre:</div>
-                                    <div class='top-genre'>${compareArr[0][0]}</div>
+                                    <div class='top-genre' id='compared-genre'></div>
                                 </div>
                                 <div class='common-genre-container'>
                                     <div class='common-genre-title'>Common Genres:</div>
@@ -322,11 +387,11 @@
                             </div>
                             <div class='count-genre-container2'>
                                 <div class='count-genre-title'>Keyword Combined:</div>
-                                <div class='percent'>${sortedComparedUsersWordCount[0].word}</div>
+                                <div class='percent' id='keyword-combined'></div>
                             </div>
                             <div class='percent-container2'>
                                 <div class='percent-title'>Keyword:</div>
-                                <div class='common-genre'>${sortedSearchedUserWordCount[0].word}</div>
+                                <div class='common-genre' id='searched-user-keyword'></div>
                             </div>
                         </div>
                         <div class='suggested-tracks-container'>
@@ -345,7 +410,10 @@
                     </div>
                 </div>`;
             document.getElementById("suggested-tracks-content").innerHTML = htmlOutput4;
+            document.getElementById("compared-genre").innerHTML = comparedGenreHtmlOutput;
             document.getElementById("searched-user-top-artist").innerHTML = searchedUserTopArtistHtmlOutput;
+            document.getElementById("keyword-combined").innerHTML = keywordCombinedHtmlOutput;
+            document.getElementById("searched-user-keyword").innerHTML = searchedUserKeywordHtmlOutput;
             createSVG();
             createPie(combinedCollectionsObj);
         } else {
@@ -503,6 +571,39 @@
     console.log(dataObj);
     let sortedDataObj = Object.values(dataObj.children).sort(function(a, b) {return b.children.length - a.children.length});
     let sortedCurrentUserWordCount = Object.values(currentUserWordCount).sort(function(a, b) {return b.count - a.count});
+
+
+
+    let currentUserFavoriteArtistHtmlOutput = '';
+    if (sortedCurrentUserArtistCount[0].name.length <= 4) {
+        currentUserFavoriteArtistHtmlOutput = `<div class='current-user-favorite-artist1'>${sortedCurrentUserArtistCount[0].name}</div>`;
+    } else if (sortedCurrentUserArtistCount[0].name.length >= 20) {
+        currentUserFavoriteArtistHtmlOutput = `<div class='current-user-favorite-artist3'>${sortedCurrentUserArtistCount[0].name}</div>`;
+    } else {
+        currentUserFavoriteArtistHtmlOutput = `<div class='current-user-favorite-artist2'>${sortedCurrentUserArtistCount[0].name}</div>`;
+    };
+
+    let currentUserFavoriteGenreHtmlOutput = '';
+    if (sortedDataObj[0].name.length <= 4) {
+        currentUserFavoriteGenreHtmlOutput = `<div class='current-user-favorite-genre1'>${sortedDataObj[0].name}</div>`;
+    } else if (sortedDataObj[0].name.length >= 20) {
+        currentUserFavoriteGenreHtmlOutput = `<div class='current-user-favorite-genre3'>${sortedDataObj[0].name}</div>`;
+    } else {
+        currentUserFavoriteGenreHtmlOutput = `<div class='current-user-favorite-genre2'>${sortedDataObj[0].name}</div>`;
+    };
+
+    let currentUserKeywordHtmlOutput = '';
+    if (sortedCurrentUserWordCount[0].word.length <= 4) {
+        currentUserKeywordHtmlOutput = `<div class='current-user-keyword1'>${sortedCurrentUserWordCount[0].word}</div>`;
+    } else if (sortedCurrentUserWordCount[0].word.length >= 20) {
+        currentUserKeywordHtmlOutput = `<div class='current-user-keyword3'>${sortedCurrentUserWordCount[0].word}</div>`;
+    } else {
+        currentUserKeywordHtmlOutput = `<div class='current-user-keyword2'>${sortedCurrentUserWordCount[0].word}</div>`;
+    };
+
+
+
+
     let htmlOutput2 = 
         `<div class='comparative-data-output'>
             <div class='comparative-genre-container'>
@@ -510,7 +611,7 @@
                     <div class='user-stats-container'>
                     <div class='top-genre-container'>
                         <div class='top-genre-title'>Favorite Artist:</div>
-                        <div class='common-genre'>${sortedCurrentUserArtistCount[0].name}</div>
+                        <div class='common-genre' id='current-user-favorite-artist'></div>
                     </div>
                     <div class='common-genre-container'>
                         <div class='common-genre-title'>${sortedCurrentUserArtistCount[0].name} Songs:</div>
@@ -518,11 +619,11 @@
                     </div>
                     <div class='count-genre-container'>
                         <div class='count-genre-title'>Favorite Genre:</div>
-                        <div class='top-genre'>${sortedDataObj[0].name}</div>
+                        <div class='top-genre' id='current-user-favorite-genre'></div>
                     </div>
                     <div class='percent-container'>
                         <div class='percent-title'>Most Common Keyword:</div>
-                        <div class='count-genre'>${sortedCurrentUserWordCount[0].word}</div>
+                        <div class='count-genre' id='current-user-keyword'></div>
                     </div>
                 </div>
             </div>
@@ -530,11 +631,14 @@
     // console.log(currentUserWordCount);
     // console.log(sortedDataObj);
     document.getElementById('current-user-data').innerHTML = htmlOutput2;
-
+    document.getElementById('current-user-favorite-genre').innerHTML = currentUserFavoriteGenreHtmlOutput; 
+    document.getElementById('current-user-favorite-artist').innerHTML = currentUserFavoriteArtistHtmlOutput;
+    document.getElementById('current-user-keyword').innerHTML = currentUserKeywordHtmlOutput;  
     // console.log('this is the currentUserArtistCount');
     // console.log(currentUserArtistCount);
     // console.log('this is the current user dataObj');
     // console.log(dataObj);
+
     createSVG();
     createPie(dataObj);
 </script>

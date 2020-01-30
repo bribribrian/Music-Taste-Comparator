@@ -7,6 +7,7 @@
             Music Taste Comparator
         </title>
         <link rel='stylesheet' href='/stylesheets/index.css' />
+        <link rel='icon' href='icon2.png'>
         <script src="https://kit.fontawesome.com/12ffa399b2.js" crossorigin="anonymous"></script>
 
     </head>
@@ -48,12 +49,17 @@
                 window.location.href = "/login"
             };
             
-            function demoUserLogIn() {
+            // function demoUserLogIn() {
 
-            };
+            // };
 
             document.addEventListener("DOMContentLoaded", () => {
                 const loginButton = document.getElementById("log-in-button");
+                loginButton.addEventListener("click", loginPage);
+            });
+
+            document.addEventListener("DOMContentLoaded", () => {
+                const loginButton = document.getElementById("demo-user-button");
                 loginButton.addEventListener("click", loginPage);
             });
         

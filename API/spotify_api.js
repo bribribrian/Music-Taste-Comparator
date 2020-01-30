@@ -34,6 +34,7 @@ module.exports.spotifyLogin = function (res) {
             scope: scope,
             redirect_uri: redirect_uri,
             state: state
+            // show_dialog: true
         })
     );
 }
