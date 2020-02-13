@@ -6,11 +6,13 @@ Music Taste Comparator
 A data visualizer for comparing taste between two Spotify users
 
 Thank you for visiting Music Taste Comparator. Music-Taste-Comparator is a data visualization and recommendation generator that takes in a current user and another searched username. Using the Spotify API, data is retrieved on the current user which is used to create a visualization of their top artists, tracks, genres, etc. Using the searched username, the Spotify API will fetch the public playlists of that username and that data will be used to make a comparison of the comonalities and differences between the 2 users in order to show how much they have in common and what artists or tracks the current user might be interested in that do not show in the current users data.
+
 <img src="src/stylesheets/MTC-login.png">
 
 ## Functionality
-=
+
 The user will log in to their account setting them as the current user. This gives access to all of their Spotify data through the API. This will generate a visualization of all their top artists, tracks, genres, and relevant information. The user can then input a username of one of their friends or a user they follow. This will then generate a data visualization of any public information that user is allowing access to. Based on that data, a visualization will be generated representing the comonalities and differences between those two users. A list of suggested tracks will be generated based on top tracks of the inputed user.
+
 <img src="src/stylesheets/MTC-main.png">
 
 ## Technologies Implemented:
