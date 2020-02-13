@@ -9,9 +9,9 @@ Thank you for visiting Music Taste Comparator. Music-Taste-Comparator is a data 
 <img src="src/stylesheets/MTC-login.png">
 
 ## Functionality
-The user will log in to their account setting them as the current user. This gives access to all of their Spotify data through the API. This will generate a visualization of all their top artists, tracks, genres, and relevant information. The user can then input a username of one of their friends or a user they follow. This will then generate a data visualization of any public information that user is allowing access to. Based on that data, a visualization will be generated representing the comonalities and differences between those two users. A recommended list of tracks will be generated based on top tracks of the inputed user.
-<img src="src/stylesheets/MTC-main.png">
 =
+The user will log in to their account setting them as the current user. This gives access to all of their Spotify data through the API. This will generate a visualization of all their top artists, tracks, genres, and relevant information. The user can then input a username of one of their friends or a user they follow. This will then generate a data visualization of any public information that user is allowing access to. Based on that data, a visualization will be generated representing the comonalities and differences between those two users. A list of suggested tracks will be generated based on top tracks of the inputed user.
+<img src="src/stylesheets/MTC-main.png">
 
 ## Technologies Implemented:
 - JavaScript
@@ -19,7 +19,6 @@ The user will log in to their account setting them as the current user. This giv
 - D3.js
 - CSS3
 - HTML5
-=
 
 ## Features
 - ### User Authentication
@@ -32,7 +31,7 @@ The user will log in to their account setting them as the current user. This giv
   - User can search the username of a friend or account of interest
   - Searched username's public data is fetched through Spotify API
   - Searched username's data is incorporated into the visualization
-- ### Recommended Tracks
+- ### Suggested Tracks
   - Current user and searched user's data is compared through common genres and keywords
   - A display is generated showing commonalities in the comaraed data
   - A list of tracks is generated from the searched user based on commonalities
