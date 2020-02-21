@@ -38,7 +38,7 @@ The user will log in to their account setting them as the current user. This giv
   - A display is generated showing commonalities in the comaraed data
   - A list of tracks is generated from the searched user based on commonalities
 
-<img src="src/stylesheets/MTC-stats.png">
+<img src='src/MTC_search.gif'/>
 
 ## Noteworthy Code Snippets
 Here we see the first section of the Spotify Auth and data retrieval
