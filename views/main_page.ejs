@@ -171,7 +171,7 @@
         e.preventDefault();
         const searchUser = document.getElementById("searchUser");
 
-        console.log(searchUser.value);
+        // console.log(searchUser.value);
         fetchSearchedUser(searchUser.value);
     }
 
@@ -228,7 +228,7 @@
                 };
             });
             let sortedSearchedUserArtistCount = Object.values(searchedUserArtistCount).sort(function(a, b) {return b.count - a.count});
-            console.log(sortedSearchedUserArtistCount);
+            // console.log(sortedSearchedUserArtistCount);
 
             const searchedUserGenreCollection = data.searchedUserGenreCollection;
             document.getElementById('canvas').innerHTML = '';
@@ -271,8 +271,8 @@
             // let compareObj = {};
             let compareArr = [];
             let percentCommon = 0;
-            console.log('this is combinedCollectionsObj');
-            console.log(combinedCollectionsObj);
+            // console.log('this is combinedCollectionsObj');
+            // console.log(combinedCollectionsObj);
             Object.values(dataObj.children).forEach((genreObj1, index) => {
                 if (combinedCollectionsObj.children[index].children.length/genreObj1.children.length > 1) {
                 // compareObj[newObj.children[index].name] = 2 - (newObj.children[index].children.length/genreObj1.children.length);
@@ -548,8 +548,8 @@
     Object.keys(genreCollection).forEach(genre => {
         dataObj.children.push({name: genreCollection[genre].genreName, children: [] });
     })
-    console.log('this is the current users trackAttributes');
-    console.log(trackAttributes);
+    // console.log('this is the current users trackAttributes');
+    // console.log(trackAttributes);
     let currentUserArtistCount = [];
     trackAttributes.forEach(track => {
         if(currentUserArtistCount[track.artists[0].name]){
@@ -565,10 +565,10 @@
             });
         });
     });
-    console.log(currentUserArtistCount);
+    // console.log(currentUserArtistCount);
     let sortedCurrentUserArtistCount = Object.values(currentUserArtistCount).sort(function(a, b) {return b.count - a.count});
-    console.log(sortedCurrentUserArtistCount);
-    console.log(dataObj);
+    // console.log(sortedCurrentUserArtistCount);
+    // console.log(dataObj);
     let sortedDataObj = Object.values(dataObj.children).sort(function(a, b) {return b.children.length - a.children.length});
     let sortedCurrentUserWordCount = Object.values(currentUserWordCount).sort(function(a, b) {return b.count - a.count});
 
