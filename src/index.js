@@ -48,7 +48,9 @@ router.get('/searcheduser', function (req, res) {
     })
   let playlisttestid = '2zgJjETFbcQNNTCIomtLA0';
   let playlisttestid2 = '1DmlXVcdfmb7viMq31HW29';
-  spotifyAPI.getPlaylistWithIsrc(playlisttestid, playlisttestid2);
+  console.log("idexjs");
+  console.log(spotifyAPI.getPlaylistWithIsrc2(playlisttestid, playlisttestid2));
+  spotifyAPI.getPlaylistWithIsrc2(playlisttestid, playlisttestid2).then(result => {console.log(result)});
 });
 
 

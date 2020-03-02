@@ -332,6 +332,22 @@ let examplePlaylistObj =  {
             ]
         }
 
+    
+// const options = {
+//     url: `https://api.music.apple.com/v1/catalog/us/playlists/${appleMusicPlaylistID}`,
+//     method: 'GET',
+//     headers: {
+//         Authorization: 'Bearer ' + appleMusicDevToken,
+//         // 'Accept': 'application/json',
+//         'Content-Type': 'application/json'
+//     }
+// };
+
+// axios(options)
+//   .then(response => {
+//     console.log(response.status);
+// });
+
 
 
 
@@ -340,40 +356,192 @@ let examplePlaylistObj =  {
 
 
 module.exports.getPlaylistWithIsrc = function (playlist_id, playlist_id2) {
-    let isrcObj1 = {};
-    let isrcObj2 = {};
-    let appleTestObj = {};
+    // let isrcObj1 = {};
+    // let isrcObj2 = {};
+    // let appleTestObj = {};
     // console.log(examplePlaylistObj.data[0].relationships.tracks.data);
-    examplePlaylistObj.data[0].relationships.tracks.data.forEach(track => {
-        appleTestObj[track.attributes.isrc] = track.attributes.isrc;
-    })
-    console.log(appleTestObj);
+    // examplePlaylistObj.data[0].relationships.tracks.data.forEach(track => {
+    //     appleTestObj[track.attributes.isrc] = track.attributes.isrc;
+    // })
+    // console.log(appleTestObj);
+    async function getPlaylistTracksInfo(playlistIdNumber) {
+        const getsPlaylist = async(playlistIdNumber) => {
+            let tracksObj = {};
+            spotifyAPI.getPlaylist(playlistIdNumber)
+            .then(function (playlist) {
+                playlist.body.tracks.items.forEach(track => {
+                    tracksObj[track.track.external_ids.isrc] = track.track.external_ids.isrc;
+                });
+                // console.log(tracksObj);
+                return Promise.resolve(tracksObj);
+            })
+            .catch(error => console.log(error))
+            .then(res => {return res})
+        };
+        let result = await getsPlaylist(playlist_id);
+        return Promise.all([result]);
+    };
+
+    // return spotifyAPI.getPlaylist(playlist_id)
+    // .then(function (playlist) {
+    //     playlist.body.tracks.items.forEach(track => {
+    //         isrcObj1[track.track.external_ids.isrc] = track.track.external_ids.isrc;
+    //     });
+    //     // console.log(isrcObj1);
+    // })
+    // .then(function () {
+    //     spotifyAPI.getPlaylist(playlist_id2)
+    //     .then(function (playlist) {
+    //         playlist.body.tracks.items.forEach(track => {
+    //         isrcObj2[track.track.external_ids.isrc] = track.track.external_ids.isrc;
+    //     });
+    //     // console.log(isrcObj2);
+    //     })
+    //     .then(function () {
+    //         let count = 0;
+    //         Object.keys(isrcObj1).forEach(key => {
+    //             // if (isrcObj2[key]) {
+    //             if (appleTestObj[key]) {
+    //                 count += 1;
+    //             }
+    //         })
+    //         // console.log(count);
+    //     })
+    // });
+//    Promise.all([getPlaylistTracksInfo(playlist_id)])
+//    .then(returnData => {console.log(returnData)});
+    console.log("before return value")
+    // console.log(getPlaylistTracksInfo(playlist_id));
+    return getPlaylistTracksInfo(playlist_id);
 
 
-    return spotifyAPI.getPlaylist(playlist_id)
+}
+
+
+
+
+
+const tracksInCommon = (spotifyPlaylistId, applePlaylistId) => {
+    let spotifyIsrcObj = {};
+    let appleMusicIsrcObj = {};
+
+    return spotifyAPI.getPlaylist(spotifyPlaylistId)
     .then(function (playlist) {
-        playlist.body.tracks.items.forEach(track => {
-            isrcObj1[track.track.external_ids.isrc] = track.track.external_ids.isrc;
+        playlist.body.tracks.items.forEach(trackItem => {
+            spotifyIsrcObj[trackItem.track.external_ids.isrc] = trackItem.track.external_ids.isrc;
         });
-        console.log(isrcObj1);
     })
-    .then(function () {
-        spotifyAPI.getPlaylist(playlist_id2)
+    .then(function () { 
+        const appleGetOptions = {
+            url: `https://api.music.apple.com/v1/catalog/us/playlists/${applePlaylistId}`,
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + appleMusicDevToken
+            }
+        };
+        axios(appleGetOptions)
         .then(function (playlist) {
-            playlist.body.tracks.items.forEach(track => {
-            isrcObj2[track.track.external_ids.isrc] = track.track.external_ids.isrc;
-        });
-        // console.log(isrcObj2);
+            playlist.data[0].relationships.tracks.data.forEach(track => {
+                appleMusicIsrcObj[track.attributes.isrc] = track.attributes.isrc;
+            });
         })
         .then(function () {
             let count = 0;
-            Object.keys(isrcObj1).forEach(key => {
-                // if (isrcObj2[key]) {
-                if (appleTestObj[key]) {
+            Object.keys(spotifyIsrcObj).forEach(key => {
+                if (appleMusicIsrcObj[key]) {
                     count += 1;
-                }
+                };
+            });
+            return count;
+        });
+    });
+};
+
+
+
+
+module.exports.getPlaylistWithIsrc2 = async function (playlist_id, playlist_id2) {
+        
+        let count = 0;
+        let tracksObj1 = {};
+        let tracksObj2 = {};
+        
+        await spotifyAPI.getPlaylist(playlist_id)
+            .then(function (playlist) {
+                playlist.body.tracks.items.forEach(track => {
+                    tracksObj1[track.track.external_ids.isrc] = track.track.external_ids.isrc;
+                });
             })
-            console.log(count);
+            .catch(error => console.log(error));
+       
+
+
+        await spotifyAPI.getPlaylist(playlist_id2)
+            .then(function (playlist) {
+                playlist.body.tracks.items.forEach(track => {
+                    tracksObj2[track.track.external_ids.isrc] = track.track.external_ids.isrc;
+                });
+            })
+            .catch(error => console.log(error))
+        
+
+
+        const counterFunc = (obj1, obj2) => {
+            Object.keys(obj1).forEach(key => {
+                if (obj2[key]) {
+                    count += 1;
+                };
+            });
+        };
+       
+        counterFunc(tracksObj1, tracksObj2);
+        return count;
+
+};
+
+
+
+
+async function tracksInCommon(spotifyPlaylistId, applePlaylistId) {
+        
+    let count = 0;
+    let spotifyIsrcObj = {};
+    let appleMusicIsrcObj = {};
+    
+    await spotifyAPI.getPlaylist(spotifyPlaylistId)
+        .then(function (playlist) {
+            playlist.body.tracks.items.forEach(trackItem => {
+                spotifyIsrcObj[trackItem.track.external_ids.isrc] = trackItem.track.external_ids.isrc;
+            });
         })
-    })
-}
+        .catch(error => console.log(error));
+   
+
+        const appleGetOptions = {
+            url: `https://api.music.apple.com/v1/catalog/us/playlists/${applePlaylistId}`,
+            method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + appleMusicDevToken
+            }
+        };
+
+    await axios(appleGetOptions)
+            .then(function (playlist) {
+                playlist.data[0].relationships.tracks.data.forEach(track => {
+                    appleMusicIsrcObj[track.attributes.isrc] = track.attributes.isrc;
+                });
+            })
+
+
+    const counterFunc = (obj1, obj2) => {
+        Object.keys(obj1).forEach(key => {
+            if (obj2[key]) {
+                count += 1;
+            };
+        });
+    };
+   
+    counterFunc(spotifyIsrcObj, appleMusicIsrcObj);
+    return count;
+
+};
