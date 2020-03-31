@@ -508,6 +508,7 @@ async function tracksInCommon(spotifyPlaylistId, applePlaylistId) {
     let spotifyIsrcObj = {};
     let appleMusicIsrcObj = {};
     
+    // Get request to Spotify API and format data into object that can be easily compared
     await spotifyAPI.getPlaylist(spotifyPlaylistId)
         .then(function (playlist) {
             playlist.body.tracks.items.forEach(trackItem => {
@@ -516,23 +517,25 @@ async function tracksInCommon(spotifyPlaylistId, applePlaylistId) {
         })
         .catch(error => console.log(error));
    
+    // Options for the Apple Music axios get request
+    const appleGetOptions = {
+        url: `https://api.music.apple.com/v1/catalog/us/playlists/${applePlaylistId}`,
+        method: 'GET',
+        headers: {
+            Authorization: 'Bearer ' + appleMusicDevToken
+        }
+    };
 
-        const appleGetOptions = {
-            url: `https://api.music.apple.com/v1/catalog/us/playlists/${applePlaylistId}`,
-            method: 'GET',
-            headers: {
-                Authorization: 'Bearer ' + appleMusicDevToken
-            }
-        };
-
+    // Get request to Apple Music API and format data into object that can be easily compared
     await axios(appleGetOptions)
-            .then(function (playlist) {
-                playlist.data[0].relationships.tracks.data.forEach(track => {
-                    appleMusicIsrcObj[track.attributes.isrc] = track.attributes.isrc;
-                });
-            })
+        .then(function (playlist) {
+            playlist.data[0].relationships.tracks.data.forEach(track => {
+                appleMusicIsrcObj[track.attributes.isrc] = track.attributes.isrc;
+            });
+        })
+        .catch(error => console.log(error));
 
-
+    // Simple counting function based on comparing object keys
     const counterFunc = (obj1, obj2) => {
         Object.keys(obj1).forEach(key => {
             if (obj2[key]) {
