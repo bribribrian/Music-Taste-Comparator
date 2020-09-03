@@ -259,7 +259,6 @@
 }
 .logout-button:hover .logout-button-dropdown{
     display: block;
-    /* height: 307px; */
     margin-top: 143px;
     padding-bottom: 10px;
 }
