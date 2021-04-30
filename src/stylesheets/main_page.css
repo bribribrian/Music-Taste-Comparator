@@ -486,7 +486,6 @@ li::before {
     width: 50%;
 }
 .canvas {
-    /* position: relative; */
     border: 17px solid black;
     padding: 10px;
     margin-left: 10px;
