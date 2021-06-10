@@ -231,7 +231,6 @@
     padding-right: 2px;
     display: flex;
     background-color: red;
-    /* border: 2px solid rgb(252, 157, 108); */
     border: 2px solid aquamarine;
     flex-direction: column;
     align-items: center;
