@@ -328,7 +328,6 @@
 .enter-username {
     font-family: 'Open Sans Condensed', sans-serif;
     border: 2px solid rgb(250, 202, 226);
-    /* background-color: aquamarine; */
     color: aquamarine;
     padding: 3px;
     height: 29px;
