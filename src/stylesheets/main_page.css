@@ -425,7 +425,6 @@ input[type=text]:focus{
     border: 2px solid aquamarine;
     flex-direction: column;
     height: 100%;
-    /* min-width: 200px; */
     /* width: 100%; */
 }
 .top-tracks-title {
